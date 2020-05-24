@@ -10,7 +10,7 @@ import './Table.scss'
 interface Props {
   title: string
   columns: TableColumn[]
-  dataSource: any
+  dataSource: any[]
 }
 
 const Table: FC<Props> = ({

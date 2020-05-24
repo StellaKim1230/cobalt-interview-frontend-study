@@ -22,10 +22,12 @@ const columns = [{
   key: 'imperial',
   title: '몸무게',
   dataIndex: 'breeds.weight.imperial',
+  render: (value: string) => `${value} kg`,
 }, {
   key: 'life_span',
   title: '수명',
   dataIndex: 'breeds.life_span',
+  render: (value: string) => `${value} 년`,
 }]
 
 function App() {

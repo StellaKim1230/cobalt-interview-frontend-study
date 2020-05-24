@@ -3,6 +3,6 @@ export interface TableColumn {
   key: string | number
   title: string
   dataIndex: string
-  render?: (parameter: string | number) => void
+  render?: (parameter?: any) => any
   align?: StringifyOptions
 }
