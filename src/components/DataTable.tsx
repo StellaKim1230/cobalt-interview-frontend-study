@@ -1,7 +1,7 @@
-import React, { FC, useState, Fragment } from 'react'
+import React, { FC, useEffect, useState, Fragment } from 'react'
 
 import cx from 'classnames'
-import { get } from 'lodash'
+import { get, orderBy } from 'lodash'
 
 import TableHead from './TableHead'
 
@@ -18,6 +18,7 @@ interface Props {
   selectableRows?: boolean
   isSelectAllDisable?: boolean
   noTableHead?: boolean
+  defaultSortKey?: string
 }
 
 const selectRowMap = new Map()
@@ -31,7 +32,13 @@ const DataTable: FC<Props> = ({
   selectableRows,
   isSelectAllDisable,
   noTableHead,
+  defaultSortKey,
 }) => {
+  // datasource
+  const [ sortedData, setSortedData ] = useState<any[]>([])
+  const [ sortOption, setSortOption ] = useState<'desc' | 'asc'>('asc')
+  const [ sortedKey, setSortedKey ] = useState<string | number | undefined>(defaultSortKey)
+
   // expandable rows
   const [ isExpand, setIsExpand ] = useState(false)
   const [ expandRow, setExpandRow ] = useState('')
@@ -39,6 +46,11 @@ const DataTable: FC<Props> = ({
   // selected rows
   const [ isSelectAll, setIsSelectAll ] = useState(false)
   const [ selectedItemsCount, setSelectedItemsCount ] = useState(0)
+
+  useEffect(() => {
+    setSortedData(sortedKey ? orderBy(data, [sortedKey], [sortOption]) : data)
+    //eslint-disable-next-line
+  }, [sortedKey, sortOption])
 
   const handleClickExpand = (e: React.MouseEvent, id: string) => {
     setIsExpand(!isExpand)
@@ -77,10 +89,14 @@ const DataTable: FC<Props> = ({
             isSelectAllDisable={isSelectAllDisable}
             selectableRows={selectableRows}
             toggleSelectAll={toggleSelectAll}
+            sortedKey={sortedKey}
+            setSortOption={setSortOption}
+            sortOption={sortOption}
+            setSortedKey={setSortedKey}
           />
         ) : null }
         <tbody className="TableRow">
-          {data.map(d => (
+          {sortedData.map(d => (
             <Fragment key={d.id}>
               <tr className="TableRow__tr" key={d.id}>
                 {expandableRows && (

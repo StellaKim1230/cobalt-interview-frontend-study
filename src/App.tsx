@@ -15,20 +15,22 @@ const columns = [{
     backgroundColor: 'rgba(0, 0, 0, .1)',
   },
 }, {
-  key: 'name',
+  key: 'breeds.name',
   title: '이름',
   dataIndex: 'breeds.name',
+  sortable: true,
 }, {
-  key: 'origin',
+  key: 'breeds.origin',
   title: '원산지',
   dataIndex: 'breeds.origin',
+  sortable: true,
 }, {
-  key: 'imperial',
+  key: 'breeds.imperial',
   title: '몸무게',
   dataIndex: 'breeds.weight.imperial',
   render: (value: string) => `${value} kg`,
 }, {
-  key: 'life_span',
+  key: 'breeds.life_span',
   title: '수명',
   dataIndex: 'breeds.life_span',
   render: (value: string) => `${value} 년`,
@@ -78,6 +80,7 @@ function App() {
         selectableRows={selectableRows}
         isSelectAllDisable={isSelectAllDisable}
         noTableHead={noTableHead}
+        defaultSortKey="breeds.name"
       />
     </div>
   );

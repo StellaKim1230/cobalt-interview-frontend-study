@@ -6,4 +6,5 @@ export interface TableColumn {
   render?: (parameter?: any) => any
   align?: StringifyOptions
   style?: any
+  sortable?: boolean
 }
