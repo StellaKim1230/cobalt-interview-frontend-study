@@ -1,4 +1,4 @@
-import React, { FC, useState } from 'react'
+import React, { FC, useState, Fragment } from 'react'
 
 import cx from 'classnames'
 
@@ -11,46 +11,67 @@ import './Table.scss'
 interface Props {
   title: string
   columns: TableColumn[]
-  dataSource: any[]
-  expandable?: boolean
+  data: any[]
+  expandableRows?: boolean
   expandableKey?: string
+  selectableRows?: boolean
+  isSelectAllDisable?: boolean
 }
+
+const selectRowMap = new Map()
 
 const Table: FC<Props> = ({
   title,
   columns,
-  dataSource,
-  expandable,
+  data,
+  expandableRows,
   expandableKey,
+  selectableRows,
+  isSelectAllDisable,
 }) => {
-  const [ isExpandable, setIsExpandable ] = useState(false)
-  const [ isShowingExpandableContent, setIsShowingExpandableContent ] = useState(false)
-  const [ expandTdId, setExpandTdId ] = useState('')
+  // expandable rows
+  const [ isExpand, setIsExpand ] = useState(false)
+  const [ expandRow, setExpandRow ] = useState('')
 
-  const handleClickExpandTd = (e: React.MouseEvent, id: string) => {
-    setIsShowingExpandableContent(!isShowingExpandableContent)
-    setExpandTdId(id)
+  // selected rows
+  const [ isSelectAll, setIsSelectAll ] = useState(false)
+
+  const handleClickExpand = (e: React.MouseEvent, id: string) => {
+    setIsExpand(!isExpand)
+    setExpandRow(id)
   }
+
+  const toggleSelectRow = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (selectRowMap.get(e.target.value)) {
+      selectRowMap.delete(e.target.value)
+    } else {
+      selectRowMap.set(e.target.value, true)
+    }
+  }
+
+  const getSelectedItemCount = () => isSelectAll ? data.length : selectRowMap.size
 
   return (
     <>
       <h2 className="Table__title">{title}</h2>
-      {expandable && (
-        <>
-          <input
-            type="checkbox"
-            id="expandable"
-            name="expandable"
-            onChange={() => setIsExpandable(!isExpandable)}
-          />
-          <label htmlFor="expandable">Expandable Rows</label>
-        </>
-      )}
+      {getSelectedItemCount() !== 0 ? (
+        <div>{getSelectedItemCount()} items selected</div>
+      ) : null}
       <table className="Table">
         <thead className="TableHeader">
           <tr className="TableHeader__tr">
-            {isExpandable && (
+            {expandableRows && (
               <th className="TableHeader__th"></th>
+            )}
+            {selectableRows && (
+              <th className={cx("TableHeader__th", {
+                "TableHeader__th--disabled": isSelectAllDisable,
+              })}>
+                <input
+                  type="checkbox"
+                  onChange={() => setIsSelectAll(!isSelectAll)}
+                />
+              </th>
             )}
             {columns.map(({ key, title, className, style }) => (
               <th
@@ -64,33 +85,43 @@ const Table: FC<Props> = ({
           </tr>
         </thead>
         <tbody className="TableRow">
-          {dataSource.map(d => (
-            <>
+          {data.map(d => (
+            <Fragment key={d.id}>
               <tr className="TableRow__tr" key={d.id}>
-                {isExpandable && (
+                {expandableRows && (
                   <td
                     className={cx('TableRow__td', {
-                      'TableRow__td--expandable': isExpandable,
+                      'TableRow__td--expandable': expandableRows,
                     })}
-                    onClick={(e) => handleClickExpandTd(e, d.id)}
+                    onClick={(e) => handleClickExpand(e, d.id)}
                   >→</td>
+                )}
+                {selectableRows && (
+                  <td className="TableHeader__td">
+                    <input
+                      type="checkbox"
+                      value={d.id}
+                      onChange={(e) => toggleSelectRow(e)}
+                      checked={isSelectAll || selectRowMap.get(d.id)}
+                    />
+                  </td>
                 )}
                 {columns.map(({ dataIndex, render, style }) => (
                   <td
-                    className="TableRow__td"
                     key={dataIndex}
+                    className="TableRow__td"
                     style={style}
                   >
                     {render ? render(get(d, dataIndex)) : get(d, dataIndex)}
                   </td>
                 ))}
               </tr>
-              {isShowingExpandableContent && expandTdId === d.id && (
+              {expandableRows && isExpand && expandRow === d.id && (
                 <tr className="TableRow__tr">
                   <td colSpan={Object.keys(d).length + 1}>{expandableKey ? get(d, expandableKey) : 'no content'}</td>
                 </tr>
               )}
-            </>
+            </Fragment>
           ))}
         </tbody>
       </table>

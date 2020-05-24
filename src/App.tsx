@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import Table from './components/Table'
 
@@ -35,20 +35,42 @@ const columns = [{
 }]
 
 function App() {
+  const [ expandableRows, setExpandableRows ] = useState(false)
+  const [ selectableRows, setSelectableRows ] = useState(false)
+  const [ isSelectAllDisable, setIsSelectAllDisable ] = useState(false)
+
   return (
     <div className="App">
       <header className="App-header">
         <h1>코발트 코딩 과제 - 프론트 엔드</h1>
       </header>
-      <main>
-        <Table
-          title="Cat List"
-          columns={columns}
-          dataSource={catDataSource}
-          expandable={true}
-          expandableKey='breeds.description'
-        />
-      </main>
+      <div>
+        <label>
+          <input type="checkbox" onChange={() => setExpandableRows(!expandableRows)} />
+          Expandable Rows
+        </label>
+      </div>
+      <div>
+        <label>
+          <input type="checkbox" onChange={() => setSelectableRows(!selectableRows)} />
+          Selectable Rows
+        </label>
+      </div>
+      {selectableRows && (
+        <label>
+          <input type="checkbox" onChange={() => setIsSelectAllDisable(!isSelectAllDisable)} />
+            Disable Select All Rows
+        </label>
+      )}
+      <Table
+        title="Cat List"
+        columns={columns}
+        data={catDataSource}
+        expandableRows={expandableRows}
+        expandableKey='breeds.description'
+        selectableRows={selectableRows}
+        isSelectAllDisable={isSelectAllDisable}
+      />
     </div>
   );
 }
