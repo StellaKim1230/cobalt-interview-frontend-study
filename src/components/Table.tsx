@@ -73,12 +73,7 @@ const Table: FC<Props> = ({
                       'TableRow__td--expandable': isExpandable,
                     })}
                     onClick={(e) => handleClickExpandTd(e, d.id)}
-                  >
-                    <img
-                      src="/icons/arrow.png"
-                      alt="arrow icon"
-                    />
-                  </td>
+                  >→</td>
                 )}
                 {columns.map(({ dataIndex, render, style }) => (
                   <td
