@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-import Table from './components/Table'
+import DataTable from './components/DataTable'
 
 import './App.scss';
 
@@ -69,7 +69,7 @@ function App() {
           </label>
         </>
       )}
-      <Table
+      <DataTable
         title="Cat List"
         columns={columns}
         data={catDataSource}

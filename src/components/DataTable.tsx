@@ -7,7 +7,7 @@ import TableHead from './TableHead'
 
 import { TableColumn } from '../@types/model'
 
-import './Table.scss'
+import './DataTable.scss'
 
 interface Props {
   title: string
@@ -22,7 +22,7 @@ interface Props {
 
 const selectRowMap = new Map()
 
-const Table: FC<Props> = ({
+const DataTable: FC<Props> = ({
   title,
   columns,
   data,
@@ -65,11 +65,11 @@ const Table: FC<Props> = ({
 
   return (
     <>
-      <h2 className="Table__title">{title}</h2>
+      <h2 className="DataTable__title">{title}</h2>
       {getSelectedItemCount() !== 0 ? (
         <div>{getSelectedItemCount()} items selected</div>
       ) : null}
-      <table className="Table">
+      <table className="DataTable">
         {!noTableHead ? (
           <TableHead
             columns={columns}
@@ -124,4 +124,4 @@ const Table: FC<Props> = ({
   )
 }
 
-export default Table
+export default DataTable
