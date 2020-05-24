@@ -1,8 +1,9 @@
 import React, { FC, useState, Fragment } from 'react'
 
 import cx from 'classnames'
-
 import { get } from 'lodash'
+
+import TableHead from './TableHead'
 
 import { TableColumn } from '../@types/model'
 
@@ -35,6 +36,7 @@ const Table: FC<Props> = ({
 
   // selected rows
   const [ isSelectAll, setIsSelectAll ] = useState(false)
+  const [ selectedItemsCount, setSelectedItemsCount ] = useState(0)
 
   const handleClickExpand = (e: React.MouseEvent, id: string) => {
     setIsExpand(!isExpand)
@@ -47,9 +49,17 @@ const Table: FC<Props> = ({
     } else {
       selectRowMap.set(e.target.value, true)
     }
+
+    setSelectedItemsCount(selectRowMap.size)
   }
 
-  const getSelectedItemCount = () => isSelectAll ? data.length : selectRowMap.size
+  const toggleSelectAll = () => {
+    setIsSelectAll(!isSelectAll)
+    selectRowMap.clear()
+    setSelectedItemsCount(0)
+  }
+
+  const getSelectedItemCount = () => isSelectAll ? data.length : selectedItemsCount
 
   return (
     <>
@@ -58,32 +68,13 @@ const Table: FC<Props> = ({
         <div>{getSelectedItemCount()} items selected</div>
       ) : null}
       <table className="Table">
-        <thead className="TableHeader">
-          <tr className="TableHeader__tr">
-            {expandableRows && (
-              <th className="TableHeader__th"></th>
-            )}
-            {selectableRows && (
-              <th className={cx("TableHeader__th", {
-                "TableHeader__th--disabled": isSelectAllDisable,
-              })}>
-                <input
-                  type="checkbox"
-                  onChange={() => setIsSelectAll(!isSelectAll)}
-                />
-              </th>
-            )}
-            {columns.map(({ key, title, className, style }) => (
-              <th
-                key={key}
-                className={cx('TableHeader__th', className)}
-                style={style}
-              >
-                {title}
-              </th>
-            ))}
-          </tr>
-        </thead>
+        <TableHead
+          columns={columns}
+          expandableRows={expandableRows}
+          isSelectAllDisable={isSelectAllDisable}
+          selectableRows={selectableRows}
+          toggleSelectAll={toggleSelectAll}
+        />
         <tbody className="TableRow">
           {data.map(d => (
             <Fragment key={d.id}>
@@ -97,7 +88,7 @@ const Table: FC<Props> = ({
                   >→</td>
                 )}
                 {selectableRows && (
-                  <td className="TableHeader__td">
+                  <td className="TableRow__td">
                     <input
                       type="checkbox"
                       value={d.id}

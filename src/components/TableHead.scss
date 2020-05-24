@@ -1,0 +1,11 @@
+.TableHead {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+}
+
+.TableHead__th {
+  padding: .5rem;
+
+  &--disabled {
+    visibility: hidden;
+  }
+}

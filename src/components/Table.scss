@@ -12,18 +12,6 @@
   margin-bottom: 1rem;
 }
 
-.TableHeader {
-  border-bottom: 1px solid rgba(0, 0, 0, 0.2);
-}
-
-.TableHeader__th {
-  padding: .5rem;
-
-  &--disabled {
-    visibility: hidden;
-  }
-}
-
 .TableRow {
   border: 1px solid rgba(0, 0, 0, 0.2);
   border-top: none;
