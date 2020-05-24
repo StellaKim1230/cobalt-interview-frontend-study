@@ -38,6 +38,7 @@ function App() {
   const [ expandableRows, setExpandableRows ] = useState(false)
   const [ selectableRows, setSelectableRows ] = useState(false)
   const [ isSelectAllDisable, setIsSelectAllDisable ] = useState(false)
+  const [ noTableHead, setNoTableHead ] = useState(false)
 
   return (
     <div className="App">
@@ -57,10 +58,16 @@ function App() {
         </label>
       </div>
       {selectableRows && (
-        <label>
-          <input type="checkbox" onChange={() => setIsSelectAllDisable(!isSelectAllDisable)} />
-            Disable Select All Rows
-        </label>
+        <>
+          <label>
+            <input type="checkbox" onChange={() => setIsSelectAllDisable(!isSelectAllDisable)} />
+              Disable Select All Rows
+          </label>
+          <label>
+          <input type="checkbox" onChange={() => setNoTableHead(!noTableHead)} />
+              No Table Head
+          </label>
+        </>
       )}
       <Table
         title="Cat List"
@@ -70,6 +77,7 @@ function App() {
         expandableKey='breeds.description'
         selectableRows={selectableRows}
         isSelectAllDisable={isSelectAllDisable}
+        noTableHead={noTableHead}
       />
     </div>
   );

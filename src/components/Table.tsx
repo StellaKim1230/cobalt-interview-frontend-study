@@ -17,6 +17,7 @@ interface Props {
   expandableKey?: string
   selectableRows?: boolean
   isSelectAllDisable?: boolean
+  noTableHead?: boolean
 }
 
 const selectRowMap = new Map()
@@ -29,6 +30,7 @@ const Table: FC<Props> = ({
   expandableKey,
   selectableRows,
   isSelectAllDisable,
+  noTableHead,
 }) => {
   // expandable rows
   const [ isExpand, setIsExpand ] = useState(false)
@@ -68,13 +70,15 @@ const Table: FC<Props> = ({
         <div>{getSelectedItemCount()} items selected</div>
       ) : null}
       <table className="Table">
-        <TableHead
-          columns={columns}
-          expandableRows={expandableRows}
-          isSelectAllDisable={isSelectAllDisable}
-          selectableRows={selectableRows}
-          toggleSelectAll={toggleSelectAll}
-        />
+        {!noTableHead ? (
+          <TableHead
+            columns={columns}
+            expandableRows={expandableRows}
+            isSelectAllDisable={isSelectAllDisable}
+            selectableRows={selectableRows}
+            toggleSelectAll={toggleSelectAll}
+          />
+        ) : null }
         <tbody className="TableRow">
           {data.map(d => (
             <Fragment key={d.id}>
