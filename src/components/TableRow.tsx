@@ -1,6 +1,6 @@
 import React, { FC } from 'react'
 
-import { pick, get } from 'lodash'
+import { get } from 'lodash'
 
 import { TableColumn } from '../@types/model'
 
@@ -15,14 +15,16 @@ const TableRow: FC<Props> = ({
   columns,
   dataSource,
 }) => {
-  const dataIndexs = columns.map(c => (pick(c, ['dataIndex', 'render'])))
-
   return (
     <tbody className="TableRow">
       {dataSource.map(d => (
         <tr className="TableRow__tr" key={d.id}>
-          {dataIndexs.map(({ dataIndex, render }) => (
-            <td className="TableRow__td" key={dataIndex}>
+          {columns.map(({ dataIndex, render, style }) => (
+            <td
+              className="TableRow__td"
+              key={dataIndex}
+              style={style}
+            >
               {render ? render(get(d, dataIndex)) : get(d, dataIndex)}
             </td>
           ))}

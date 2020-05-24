@@ -5,4 +5,5 @@ export interface TableColumn {
   dataIndex: string
   render?: (parameter?: any) => any
   align?: StringifyOptions
+  style?: any
 }

@@ -10,6 +10,9 @@ const columns = [{
   key: 'id',
   title: 'ID',
   dataIndex: 'id',
+  style: {
+    color: 'red',
+  },
 }, {
   key: 'name',
   title: '이름',

@@ -14,10 +14,11 @@ const TableHeader: FC<Props> = ({ columns }) => {
   return ( 
     <thead className="TableHeader">
       <tr className="TableHeader__tr">
-        {columns.map(({ key, title, className}) => (
+        {columns.map(({ key, title, className, style }) => (
           <th
             key={key}
             className={cx('TableHeader__th', className)}
+            style={style}
           >
             {title}
           </th>
