@@ -12,6 +12,7 @@ const columns = [{
   dataIndex: 'id',
   style: {
     color: 'red',
+    backgroundColor: 'rgba(0, 0, 0, .1)',
   },
 }, {
   key: 'name',
