@@ -45,6 +45,8 @@ function App() {
           title="Cat List"
           columns={columns}
           dataSource={catDataSource}
+          expandable={true}
+          expandableKey='breeds.description'
         />
       </main>
     </div>
