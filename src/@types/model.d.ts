@@ -1,10 +1,8 @@
 export interface TableColumn {
-  className?: string
   key: string | number
   title: string
-  dataIndex: string
+  selector: string
   render?: (parameter?: any) => any
-  align?: StringifyOptions
   style?: any
   sortable?: boolean
 }

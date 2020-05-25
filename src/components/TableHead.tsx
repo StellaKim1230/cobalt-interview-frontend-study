@@ -1,6 +1,7 @@
-import React, { FC } from 'react'
+import React, { FC, } from 'react'
 
 import cx from 'classnames'
+import { isNil } from 'lodash'
 
 import { TableColumn } from '../@types/model'
 import { SortType } from '../utils/constants'
@@ -12,12 +13,13 @@ interface Props {
   expandableRows?: boolean
   isSelectAllDisable?: boolean
   selectableRows?: boolean
-  toggleSelectAll?: () => void
   sortedKey?: string | number | undefined
-  setSortOption?: React.Dispatch<React.SetStateAction<'desc' | 'asc'>>
-  sortOption?: 'desc' | 'asc'
-  setSortedKey?: React.Dispatch<React.SetStateAction<string | number | undefined>>
+  sortOption: [string, SortType] | null
+  toggleSelectAll?: () => void
+  setSortOption: React.Dispatch<React.SetStateAction<Props['sortOption']>>
 }
+
+const getSortIcon = (sortType: SortType) => (sortType === SortType.ASC) ? '↑' : '↓'
 
 const TableHead: FC<Props> = ({
   columns,
@@ -25,33 +27,32 @@ const TableHead: FC<Props> = ({
   selectableRows,
   isSelectAllDisable,
   toggleSelectAll,
-  sortedKey,
-  setSortOption,
   sortOption,
-  setSortedKey,
+  setSortOption,
 }) => {
-  const handleClickSortOption = ({
-    sortable,
-    key,
-    sortOption,
-  }: {
-    sortable: boolean | undefined,
-    key: string | number,
-    sortOption: 'desc' | 'asc' | undefined
-  }) => {
-    if (!sortable) return
-    if (setSortedKey) setSortedKey(key)
-    if (setSortOption && sortOption === SortType.ASC) setSortOption('desc')
-    if (setSortOption && sortOption === SortType.DESC) setSortOption('asc')
+  const onChangeSortData = (e: any) => {
+    const selector = e.target.dataset.sortfield
+    if (isNil(selector)) {
+      return
+    }
+
+    const isAlreadySorted = sortOption?.[0] === selector
+
+    if (isNil(sortOption) || !isAlreadySorted) {
+      setSortOption([selector, SortType.ASC])
+      return
+    }
+
+    setSortOption([selector, sortOption[1] === SortType.ASC ? SortType.DESC : SortType.ASC])
   }
 
   return (
     <thead className="TableHead">
-      <tr className="TableHead__tr">
-        {expandableRows && (
+      <tr className="TableHead__tr" onClick={onChangeSortData}>
+        {expandableRows ? (
           <th className="TableHead__th"></th>
-        )}
-        {selectableRows && (
+        ) : null}
+        {selectableRows ? (
           <th className={cx("TableHead__th", {
             "TableHead__th--disabled": isSelectAllDisable,
           })}>
@@ -60,17 +61,18 @@ const TableHead: FC<Props> = ({
               onChange={toggleSelectAll}
             />
           </th>
-        )}
-        {columns.map(({ key, title, className, style, sortable }) => (
+        ) : null}
+        {columns.map(({ key, title, style, sortable, selector }) => (
           <th
             key={key}
-            className={cx('TableHead__th', className)}
+            className="TableHead__th"
             style={style}
-            onClick={() => handleClickSortOption({ sortable, key: key.toString(), sortOption })}
+            data-sortfield={sortable && !isNil(setSortOption) && selector}
           >
             {title}
-            {(sortedKey === key && sortable !== undefined && sortOption === SortType.ASC) && '↑'}
-            {(sortedKey === key && sortable !== undefined && sortOption === SortType.DESC) && '↓'}
+            {sortable && !isNil(sortOption) && sortOption[0] === selector
+              ? getSortIcon(sortOption[1])
+              : null}
           </th>
         ))}
       </tr>

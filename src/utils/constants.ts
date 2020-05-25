@@ -1,4 +1,4 @@
-export const SortType = {
-  ASC: 'asc',
-  DESC: 'desc',
+export enum SortType {
+  ASC = 'asc',
+  DESC = 'desc',
 }

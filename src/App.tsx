@@ -9,7 +9,7 @@ import catDataSource from './dummy/cats.json'
 const columns = [{
   key: 'id',
   title: 'ID',
-  dataIndex: 'id',
+  selector: 'id',
   style: {
     color: 'red',
     backgroundColor: 'rgba(0, 0, 0, .1)',
@@ -17,22 +17,22 @@ const columns = [{
 }, {
   key: 'breeds.name',
   title: '이름',
-  dataIndex: 'breeds.name',
+  selector: 'breeds.name',
   sortable: true,
 }, {
   key: 'breeds.origin',
   title: '원산지',
-  dataIndex: 'breeds.origin',
+  selector: 'breeds.origin',
   sortable: true,
 }, {
   key: 'breeds.imperial',
   title: '몸무게',
-  dataIndex: 'breeds.weight.imperial',
+  selector: 'breeds.weight.imperial',
   render: (value: string) => `${value} kg`,
 }, {
   key: 'breeds.life_span',
   title: '수명',
-  dataIndex: 'breeds.life_span',
+  selector: 'breeds.life_span',
   render: (value: string) => `${value} 년`,
 }]
 
