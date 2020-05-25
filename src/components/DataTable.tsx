@@ -198,6 +198,9 @@ const DataTable: FC<Props> = ({
       )}
       {pagination ? (
         <Pagination
+          currentPageIndex={pageIndex}
+          pageTotalSize={currentData.length}
+          pageChunkSize={pageChunkSize}
           setPageIndex={setPageIndex}
           setPageChunkSize={setPageChunkSize}
         />
