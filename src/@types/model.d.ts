@@ -6,3 +6,8 @@ export interface TableColumn {
   style?: any
   sortable?: boolean
 }
+
+export interface ChunkedDataParams {
+  data: any[]
+  pageChunkSize: number
+}

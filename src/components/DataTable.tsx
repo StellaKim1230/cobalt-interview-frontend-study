@@ -1,12 +1,13 @@
 import React, { FC, useEffect, useState, Fragment } from 'react'
 
 import cx from 'classnames'
-import { get, orderBy, find, isNil } from 'lodash'
+import { get, orderBy, find, isNil, chunk } from 'lodash'
 
 import TableHead from './TableHead'
+import Pagination from './Pagination'
 
-import { TableColumn } from '../@types/model'
-import { SortType } from '../utils/constants'
+import { TableColumn, ChunkedDataParams } from '../@types/model'
+import { SortType, DEFAULT_PAGE_CHUNK_SIZE, DEFAULT_CURRENT_PAGE_INDEX } from '../utils/constants'
 
 import './DataTable.scss'
 
@@ -20,6 +21,7 @@ interface Props {
   selectableRows?: boolean
   isDisableSelectAll?: boolean
   noTableHead?: boolean
+  pagination?: boolean
   defaultSortKey?: string
 }
 
@@ -35,6 +37,7 @@ const DataTable: FC<Props> = ({
   selectableRows,
   isDisableSelectAll,
   noTableHead,
+  pagination,
   defaultSortKey,
 }) => {
   const getSortOption = (defaultSortKey?: string, sortableColum?: string): [string, SortType] | null => {
@@ -44,6 +47,10 @@ const DataTable: FC<Props> = ({
 
   const getSortedData = (data: any[], sortOption: [string, SortType] | null) => {
     return sortOption ? orderBy(data, sortOption[0], sortOption[1]) : data
+  }
+
+  const getChunkedData = ({ data, pageChunkSize }: ChunkedDataParams) => {
+    return chunk(data, pageChunkSize)
   }
 
   // datasource
@@ -59,6 +66,44 @@ const DataTable: FC<Props> = ({
   // selected rows
   const [ isSelectAll, setIsSelectAll ] = useState(false)
   const [ selectedItemsCount, setSelectedItemsCount ] = useState(0)
+
+  // pagination
+  const [ pageChunkSize, setPageChunkSize ] = useState(DEFAULT_PAGE_CHUNK_SIZE)
+  const [ pageIndex, setPageIndex ] = useState(DEFAULT_CURRENT_PAGE_INDEX)
+
+  const [ chunkedData, setChunkedData ] = useState(
+    pagination
+      ? getChunkedData({
+        data: sortedData,
+        pageChunkSize,
+      })
+      : sortedData
+  )
+
+  // 실제 사용될 데이터
+  const [ currentData, setCurrentData ] = useState<any[]>(pagination ? chunkedData[pageIndex] : sortedData)
+
+  useEffect(() => {
+    setCurrentData(
+      pagination
+        ? getChunkedData({
+          data: sortedData,
+          pageChunkSize,
+        })[pageIndex]
+        : sortedData
+    )
+    //eslint-disable-next-line
+  }, [chunkedData, pageIndex, pageChunkSize])
+
+  useEffect(() => {
+    setChunkedData(
+      getChunkedData({
+        data: sortedData,
+        pageChunkSize,
+      })
+    )
+    //eslint-disable-next-line
+  }, [pageChunkSize, pagination])
 
   useEffect(() => {
     setSortedData(getSortedData(sortedData, sortOption))
@@ -110,7 +155,7 @@ const DataTable: FC<Props> = ({
             />
           ) : null }
           <tbody className="TableRow">
-            {sortedData.map(d => (
+            {currentData.map(d => (
               <Fragment key={d.id}>
                 <tr className="TableRow__tr" key={d.id}>
                   {expandableRows ? (
@@ -151,6 +196,12 @@ const DataTable: FC<Props> = ({
           </tbody>
         </table>
       )}
+      {pagination ? (
+        <Pagination
+          setPageIndex={setPageIndex}
+          setPageChunkSize={setPageChunkSize}
+        />
+      ) : null}
     </>
   )
 }
