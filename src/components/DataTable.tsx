@@ -5,6 +5,7 @@ import { get, orderBy, find, isNil, chunk } from 'lodash'
 
 import TableHead from './TableHead'
 import Pagination from './Pagination'
+import SearchInput from './SearchInput'
 
 import { TableColumn, ChunkedDataParams } from '../@types/model'
 import { SortType, DEFAULT_PAGE_CHUNK_SIZE, DEFAULT_CURRENT_PAGE_INDEX } from '../utils/constants'
@@ -23,6 +24,7 @@ interface Props {
   noTableHead?: boolean
   pagination?: boolean
   defaultSortKey?: string
+  isSearch?: boolean
 }
 
 const selectedData = new Map()
@@ -39,6 +41,7 @@ const DataTable: FC<Props> = ({
   noTableHead,
   pagination,
   defaultSortKey,
+  isSearch,
 }) => {
   const getSortOption = (defaultSortKey?: string, sortableColum?: string): [string, SortType] | null => {
     const sortField = defaultSortKey ?? sortableColum
@@ -135,6 +138,9 @@ const DataTable: FC<Props> = ({
 
   return (
     <>
+      {isSearch ? (
+        <SearchInput />
+      ) : null}
       <h2 className="DataTable__title">{title}</h2>
       {getSelectedItemCount() !== 0 ? (
         <div>{getSelectedItemCount()} items selected</div>

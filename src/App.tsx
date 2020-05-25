@@ -43,6 +43,7 @@ function App() {
   const [ isDisableSelectAll, setIsDisableSelectAll ] = useState(false)
   const [ noTableHead, setNoTableHead ] = useState(false)
   const [ pagination, setPagination ] = useState(false)
+  const [ isSearch, setIsSearch ] = useState(false)
 
   return (
     <div className="App">
@@ -85,6 +86,12 @@ function App() {
           Pagination
         </label>
       </div>
+      <div>
+        <label>
+          <input type="checkbox" onChange={() => setIsSearch(!isSearch)} />
+          Search
+        </label>
+      </div>
       <DataTable
         title="Cat List"
         columns={columns}
@@ -96,6 +103,7 @@ function App() {
         isDisableSelectAll={isDisableSelectAll}
         noTableHead={noTableHead}
         pagination={pagination}
+        isSearch={isSearch}
         defaultSortKey="breeds.name"
       />
     </div>
