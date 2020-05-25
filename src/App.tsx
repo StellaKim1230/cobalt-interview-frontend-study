@@ -97,6 +97,7 @@ function App() {
         noTableHead={noTableHead}
         pagination={pagination}
         defaultSortKey="breeds.name"
+        xScroll="1200"
       />
     </div>
   );

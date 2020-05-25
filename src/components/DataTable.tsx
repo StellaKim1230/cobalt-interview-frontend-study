@@ -23,6 +23,7 @@ interface Props {
   noTableHead?: boolean
   pagination?: boolean
   defaultSortKey?: string
+  xScroll?: string
 }
 
 const selectedData = new Map()
@@ -39,6 +40,7 @@ const DataTable: FC<Props> = ({
   noTableHead,
   pagination,
   defaultSortKey,
+  xScroll,
 }) => {
   const getSortOption = (defaultSortKey?: string, sortableColum?: string): [string, SortType] | null => {
     const sortField = defaultSortKey ?? sortableColum
