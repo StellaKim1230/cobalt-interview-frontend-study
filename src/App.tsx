@@ -37,9 +37,10 @@ const columns = [{
 }]
 
 function App() {
+  const [ isLoading, setIsLoading ] = useState(false)
   const [ expandableRows, setExpandableRows ] = useState(false)
   const [ selectableRows, setSelectableRows ] = useState(false)
-  const [ isSelectAllDisable, setIsSelectAllDisable ] = useState(false)
+  const [ isDisableSelectAll, setIsDisableSelectAll ] = useState(false)
   const [ noTableHead, setNoTableHead ] = useState(false)
 
   return (
@@ -47,6 +48,12 @@ function App() {
       <header className="App-header">
         <h1>코발트 코딩 과제 - 프론트 엔드</h1>
       </header>
+      <div>
+        <label>
+          <input type="checkbox" onChange={() => setIsLoading(!isLoading)} />
+          Simulate Loading State
+        </label>
+      </div>
       <div>
         <label>
           <input type="checkbox" onChange={() => setExpandableRows(!expandableRows)} />
@@ -62,7 +69,7 @@ function App() {
       {selectableRows && (
         <>
           <label>
-            <input type="checkbox" onChange={() => setIsSelectAllDisable(!isSelectAllDisable)} />
+            <input type="checkbox" onChange={() => setIsDisableSelectAll(!isDisableSelectAll)} />
               Disable Select All Rows
           </label>
           <label>
@@ -75,10 +82,11 @@ function App() {
         title="Cat List"
         columns={columns}
         data={catDataSource}
+        isLoading={isLoading}
         expandableRows={expandableRows}
         expandableKey='breeds.description'
         selectableRows={selectableRows}
-        isSelectAllDisable={isSelectAllDisable}
+        isDisableSelectAll={isDisableSelectAll}
         noTableHead={noTableHead}
         defaultSortKey="breeds.name"
       />

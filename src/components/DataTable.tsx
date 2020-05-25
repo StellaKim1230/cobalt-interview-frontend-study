@@ -14,10 +14,11 @@ interface Props {
   title: string
   columns: TableColumn[]
   data: any[]
+  isLoading?: boolean
   expandableRows?: boolean
   expandableKey?: string
   selectableRows?: boolean
-  isSelectAllDisable?: boolean
+  isDisableSelectAll?: boolean
   noTableHead?: boolean
   defaultSortKey?: string
 }
@@ -28,10 +29,11 @@ const DataTable: FC<Props> = ({
   title,
   columns,
   data,
+  isLoading,
   expandableRows,
   expandableKey,
   selectableRows,
-  isSelectAllDisable,
+  isDisableSelectAll,
   noTableHead,
   defaultSortKey,
 }) => {
@@ -92,59 +94,63 @@ const DataTable: FC<Props> = ({
       {getSelectedItemCount() !== 0 ? (
         <div>{getSelectedItemCount()} items selected</div>
       ) : null}
-      <table className="DataTable">
-        {!noTableHead ? (
-          <TableHead
-            columns={columns}
-            expandableRows={expandableRows}
-            isSelectAllDisable={isSelectAllDisable}
-            selectableRows={selectableRows}
-            toggleSelectAll={toggleSelectAll}
-            sortOption={sortOption}
-            setSortOption={setSortOption}
-          />
-        ) : null }
-        <tbody className="TableRow">
-          {sortedData.map(d => (
-            <Fragment key={d.id}>
-              <tr className="TableRow__tr" key={d.id}>
-                {expandableRows ? (
-                  <td
-                    className={cx('TableRow__td', {
-                      'TableRow__td--expandable': expandableRows,
-                    })}
-                    onClick={(e) => handleClickExpand(e, d.id)}
-                  >→</td>
-                ) : null}
-                {selectableRows ? (
-                  <td className="TableRow__td">
-                    <input
-                      type="checkbox"
-                      value={d.id}
-                      onChange={(e) => toggleSelectRow(e)}
-                      checked={isSelectAll || selectedData.get(d.id)}
-                    />
-                  </td>
-                ) : null}
-                {columns.map(({ selector, render, style }) => (
-                  <td
-                    key={selector}
-                    className="TableRow__td"
-                    style={style}
-                  >
-                    {render ? render(get(d, selector)) : get(d, selector)}
-                  </td>
-                ))}
-              </tr>
-              {expandableRows && isExpand && expandRow === d.id ? (
-                <tr className="TableRow__tr">
-                  <td colSpan={Object.keys(d).length + 1}>{expandableKey ? get(d, expandableKey) : 'no content'}</td>
+      {isLoading ? (
+        <p>Loading...</p>
+      ) : (
+        <table className="DataTable">
+          {!noTableHead ? (
+            <TableHead
+              columns={columns}
+              expandableRows={expandableRows}
+              isDisableSelectAll={isDisableSelectAll}
+              selectableRows={selectableRows}
+              toggleSelectAll={toggleSelectAll}
+              sortOption={sortOption}
+              setSortOption={setSortOption}
+            />
+          ) : null }
+          <tbody className="TableRow">
+            {sortedData.map(d => (
+              <Fragment key={d.id}>
+                <tr className="TableRow__tr" key={d.id}>
+                  {expandableRows ? (
+                    <td
+                      className={cx('TableRow__td', {
+                        'TableRow__td--expandable': expandableRows,
+                      })}
+                      onClick={(e) => handleClickExpand(e, d.id)}
+                    >→</td>
+                  ) : null}
+                  {selectableRows ? (
+                    <td className="TableRow__td">
+                      <input
+                        type="checkbox"
+                        value={d.id}
+                        onChange={(e) => toggleSelectRow(e)}
+                        checked={isSelectAll || selectedData.get(d.id)}
+                      />
+                    </td>
+                  ) : null}
+                  {columns.map(({ selector, render, style }) => (
+                    <td
+                      key={selector}
+                      className="TableRow__td"
+                      style={style}
+                    >
+                      {render ? render(get(d, selector)) : get(d, selector)}
+                    </td>
+                  ))}
                 </tr>
-              ) : null}
-            </Fragment>
-          ))}
-        </tbody>
-      </table>
+                {expandableRows && isExpand && expandRow === d.id ? (
+                  <tr className="TableRow__tr">
+                    <td colSpan={Object.keys(d).length + 1}>{expandableKey ? get(d, expandableKey) : 'no content'}</td>
+                  </tr>
+                ) : null}
+              </Fragment>
+            ))}
+          </tbody>
+        </table>
+      )}
     </>
   )
 }

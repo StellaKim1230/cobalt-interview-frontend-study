@@ -11,7 +11,7 @@ import './TableHead.scss'
 interface Props {
   columns: TableColumn[]
   expandableRows?: boolean
-  isSelectAllDisable?: boolean
+  isDisableSelectAll?: boolean
   selectableRows?: boolean
   sortedKey?: string | number | undefined
   sortOption: [string, SortType] | null
@@ -25,7 +25,7 @@ const TableHead: FC<Props> = ({
   columns,
   expandableRows,
   selectableRows,
-  isSelectAllDisable,
+  isDisableSelectAll,
   toggleSelectAll,
   sortOption,
   setSortOption,
@@ -54,7 +54,7 @@ const TableHead: FC<Props> = ({
         ) : null}
         {selectableRows ? (
           <th className={cx("TableHead__th", {
-            "TableHead__th--disabled": isSelectAllDisable,
+            "TableHead__th--disabled": isDisableSelectAll,
           })}>
             <input
               type="checkbox"
