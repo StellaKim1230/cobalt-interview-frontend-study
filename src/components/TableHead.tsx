@@ -3,8 +3,8 @@ import React, { FC, } from 'react'
 import cx from 'classnames'
 import { isNil } from 'lodash'
 
-import { TableColumn } from '../@types/model'
 import { SortType } from '../utils/constants'
+import { TableColumn } from '../@types/model'
 
 import './TableHead.scss'
 

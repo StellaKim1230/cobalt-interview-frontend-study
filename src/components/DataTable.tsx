@@ -1,14 +1,15 @@
 import React, { FC, useEffect, useState, Fragment } from 'react'
 
 import cx from 'classnames'
-import { get, orderBy, find, isNil, chunk } from 'lodash'
+import { get, find } from 'lodash'
 
 import TableHead from './TableHead'
 import Pagination from './Pagination'
 import SearchInput from './SearchInput'
 
-import { TableColumn, ChunkedDataParams } from '../@types/model'
+import { TableColumn } from '../@types/model'
 import { SortType, DEFAULT_PAGE_CHUNK_SIZE, DEFAULT_CURRENT_PAGE_INDEX } from '../utils/constants'
+import { getSortOption, getSortedData, getChunkedData } from '../utils/DataTableHelper'
 
 import './DataTable.scss'
 
@@ -43,19 +44,6 @@ const DataTable: FC<Props> = ({
   defaultSortKey,
   isSearch,
 }) => {
-  const getSortOption = (defaultSortKey?: string, sortableColum?: string): [string, SortType] | null => {
-    const sortField = defaultSortKey ?? sortableColum
-    return isNil(sortField) ? null : [sortField, SortType.ASC]
-  }
-
-  const getSortedData = (data: any[], sortOption: [string, SortType] | null) => {
-    return sortOption ? orderBy(data, sortOption[0], sortOption[1]) : data
-  }
-
-  const getChunkedData = ({ data, pageChunkSize }: ChunkedDataParams) => {
-    return chunk(data, pageChunkSize)
-  }
-
   // datasource
   const [ sortOption, setSortOption ] = useState<[string, SortType] | null>(
     getSortOption(defaultSortKey, find(columns, ['sortable', true])?.selector)
