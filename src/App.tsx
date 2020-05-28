@@ -103,8 +103,9 @@ function App() {
         isDisableSelectAll={isDisableSelectAll}
         noTableHead={noTableHead}
         pagination={pagination}
-        isSearch={isSearch}
         defaultSortKey="breeds.name"
+        isSearch={isSearch}
+        defaultSearchOption="breeds.name"
       />
     </div>
   );

@@ -1,7 +1,6 @@
-import { isNil, orderBy, chunk} from 'lodash'
+import { isNil, orderBy } from 'lodash'
 
 import { SortType } from './constants'
-import { ChunkedDataParams } from '../@types/model'
 
 export const getSortOption = (defaultSortKey?: string, sortableColum?: string): [string, SortType] | null => {
   const sortField = defaultSortKey ?? sortableColum
@@ -10,8 +9,4 @@ export const getSortOption = (defaultSortKey?: string, sortableColum?: string): 
 
 export const getSortedData = (data: any[], sortOption: [string, SortType] | null) => {
   return sortOption ? orderBy(data, sortOption[0], sortOption[1]) : data
-}
-
-export const getChunkedData = ({ data, pageChunkSize }: ChunkedDataParams) => {
-  return chunk(data, pageChunkSize)
 }

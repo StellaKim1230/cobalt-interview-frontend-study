@@ -1,7 +1,7 @@
 import React, { FC, useEffect, useState, Fragment } from 'react'
 
 import cx from 'classnames'
-import { get, find } from 'lodash'
+import { get, find, chunk, isNil } from 'lodash'
 
 import TableHead from './TableHead'
 import Pagination from './Pagination'
@@ -9,7 +9,7 @@ import SearchInput from './SearchInput'
 
 import { TableColumn } from '../@types/model'
 import { SortType, DEFAULT_PAGE_CHUNK_SIZE, DEFAULT_CURRENT_PAGE_INDEX } from '../utils/constants'
-import { getSortOption, getSortedData, getChunkedData } from '../utils/DataTableHelper'
+import { getSortOption, getSortedData } from '../utils/dataTableUtils'
 
 import './DataTable.scss'
 
@@ -26,6 +26,7 @@ interface Props {
   pagination?: boolean
   defaultSortKey?: string
   isSearch?: boolean
+  defaultSearchOption?: string
 }
 
 const selectedData = new Map()
@@ -43,6 +44,7 @@ const DataTable: FC<Props> = ({
   pagination,
   defaultSortKey,
   isSearch,
+  defaultSearchOption,
 }) => {
   // datasource
   const [ sortOption, setSortOption ] = useState<[string, SortType] | null>(
@@ -62,44 +64,16 @@ const DataTable: FC<Props> = ({
   const [ pageChunkSize, setPageChunkSize ] = useState(DEFAULT_PAGE_CHUNK_SIZE)
   const [ pageIndex, setPageIndex ] = useState(DEFAULT_CURRENT_PAGE_INDEX)
 
+  // search
+  const [ searchOption, setSearchOption ] = useState(defaultSearchOption || '')
+  const [ searchKeyword, setSearchKeyword ] = useState('')
+
   const [ chunkedData, setChunkedData ] = useState(
-    pagination
-      ? getChunkedData({
-        data: sortedData,
-        pageChunkSize,
-      })
-      : sortedData
+    pagination ? chunk(sortedData, pageChunkSize) : sortedData
   )
 
   // 실제 사용될 데이터
   const [ currentData, setCurrentData ] = useState<any[]>(pagination ? chunkedData[pageIndex] : sortedData)
-
-  useEffect(() => {
-    setCurrentData(
-      pagination
-        ? getChunkedData({
-          data: sortedData,
-          pageChunkSize,
-        })[pageIndex]
-        : sortedData
-    )
-    //eslint-disable-next-line
-  }, [chunkedData, pageIndex, pageChunkSize])
-
-  useEffect(() => {
-    setChunkedData(
-      getChunkedData({
-        data: sortedData,
-        pageChunkSize,
-      })
-    )
-    //eslint-disable-next-line
-  }, [pageChunkSize, pagination])
-
-  useEffect(() => {
-    setSortedData(getSortedData(sortedData, sortOption))
-    //eslint-disable-next-line
-  }, [sortOption])
 
   const handleClickExpand = (e: React.MouseEvent, id: string) => {
     setIsExpand(!isExpand)
@@ -124,10 +98,52 @@ const DataTable: FC<Props> = ({
 
   const getSelectedItemCount = () => isSelectAll ? data.length : selectedItemsCount
 
+  useEffect(() => {
+    setCurrentData(
+      pagination ? chunkedData[pageIndex] : sortedData
+    )
+    //eslint-disable-next-line
+  }, [chunkedData, pageIndex, pageChunkSize])
+
+  useEffect(() => {
+    setChunkedData(chunk(sortedData, pageChunkSize))
+    //eslint-disable-next-line
+  }, [pageChunkSize, pagination, sortedData])
+
+  useEffect(() => {
+    setSortedData(getSortedData(sortedData, sortOption))
+    //eslint-disable-next-line
+  }, [sortOption])
+
+  useEffect(() => {
+    if (isNil(searchKeyword)) {
+      return
+    }
+
+    if (!searchKeyword) {
+      setSortedData(getSortedData(data, sortOption))
+    }
+
+    if (searchKeyword) {
+      setSortedData(
+        getSortedData(
+          data.filter(data => get(data, searchOption) === searchKeyword),
+          sortOption
+        )
+      )
+    }
+    // eslint-disable-next-line
+  }, [searchKeyword])
+
   return (
     <>
       {isSearch ? (
-        <SearchInput />
+        <SearchInput
+          defaultSearchOption={defaultSearchOption}
+          columns={columns}
+          setSearchOption={setSearchOption}
+          setSearchKeyword={setSearchKeyword}
+        />
       ) : null}
       <h2 className="DataTable__title">{title}</h2>
       {getSelectedItemCount() !== 0 ? (
@@ -149,9 +165,9 @@ const DataTable: FC<Props> = ({
             />
           ) : null }
           <tbody className="TableRow">
-            {currentData.map(d => (
+            {currentData?.map(d => (
               <Fragment key={d.id}>
-                <tr className="TableRow__tr" key={d.id}>
+                <tr className="TableRow__tr" >
                   {expandableRows ? (
                     <td
                       className={cx('TableRow__td', {
@@ -193,7 +209,7 @@ const DataTable: FC<Props> = ({
       {pagination ? (
         <Pagination
           currentPageIndex={pageIndex}
-          pageTotalSize={currentData.length}
+          pageTotalSize={sortedData.length}
           pageChunkSize={pageChunkSize}
           setPageIndex={setPageIndex}
           setPageChunkSize={setPageChunkSize}

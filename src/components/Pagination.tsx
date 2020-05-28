@@ -34,7 +34,7 @@ const Pagination: FC<Props> = ({
         ))}
       </select>
       <div>
-        <button type="button" onClick={() => setPageIndex(0)}>맨 앞으로</button>
+        <button type="button" onClick={() => setPageIndex(0)} disabled={currentPageIndex === 0}>맨 앞으로</button>
       </div>
       <div>
         <button type="button" onClick={() => setPageIndex(currentPageIndex - 1)} disabled={currentPageIndex === 0}>
