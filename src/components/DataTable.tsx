@@ -1,7 +1,7 @@
 import React, { FC, useEffect, useState, Fragment } from 'react'
 
 import cx from 'classnames'
-import { get, find, chunk, isNil, isFunction, merge } from 'lodash'
+import { get, find, chunk, isNil, isFunction, merge, eq, includes } from 'lodash'
 
 import TableHead from './TableHead'
 import Pagination from './Pagination'
@@ -9,7 +9,7 @@ import SearchInput from './SearchInput'
 import TableCell from './TableCell'
 
 import { TableColumn } from '../@types/model'
-import { SortType, DEFAULT_PAGE_CHUNK_SIZE, DEFAULT_CURRENT_PAGE_INDEX } from '../utils/constants'
+import { SortType, SearchType, DEFAULT_PAGE_CHUNK_SIZE, DEFAULT_CURRENT_PAGE_INDEX } from '../utils/constants'
 import { getSortOption, getSortedData } from '../utils/dataTableUtils'
 
 import './DataTable.scss'
@@ -74,8 +74,9 @@ const DataTable: FC<Props> = ({
   const [ pageIndex, setPageIndex ] = useState(DEFAULT_CURRENT_PAGE_INDEX)
 
   // search
-  const [ searchOption, setSearchOption ] = useState(defaultSearchKey || '')
+  const [ searchColumn, setSearchColumn ] = useState(defaultSearchKey || '')
   const [ searchKeyword, setSearchKeyword ] = useState('')
+  const [ searchType, setSearchType ] = useState(SearchType.EQ)
 
   const [ chunkedData, setChunkedData ] = useState(
     pagination ? chunk(sortedData, pageChunkSize) : sortedData
@@ -134,15 +135,17 @@ const DataTable: FC<Props> = ({
     }
 
     if (searchKeyword) {
+      const filterFunction = searchType === SearchType.EQ ? eq : includes
+
       setSortedData(
         getSortedData(
-          data.filter(data => get(data, searchOption) === searchKeyword),
+          data.filter(data => filterFunction(get(data, searchColumn).toLowerCase(), searchKeyword.toLowerCase())),
           sortOption
         )
       )
     }
     // eslint-disable-next-line
-  }, [searchKeyword])
+  }, [searchKeyword, searchType])
 
   return (
     <>
@@ -150,8 +153,9 @@ const DataTable: FC<Props> = ({
         <SearchInput
           defaultSearchKey={defaultSearchKey}
           columns={columns}
-          setSearchOption={setSearchOption}
+          setSearchColumn={setSearchColumn}
           setSearchKeyword={setSearchKeyword}
+          setSearchType={setSearchType}
         />
       ) : null}
       <h2 className="DataTable__title">{title}</h2>

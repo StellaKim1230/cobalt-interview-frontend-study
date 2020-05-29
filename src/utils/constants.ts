@@ -3,6 +3,11 @@ export enum SortType {
   DESC = 'desc',
 }
 
+export enum SearchType {
+  EQ = 'equal',
+  CONTAIN = 'contain',
+}
+
 export const DEFAULT_PAGE_CHUNK_SIZE = 10
 
 export const DEFAULT_CURRENT_PAGE_INDEX = 0
