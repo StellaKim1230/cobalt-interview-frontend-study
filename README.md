@@ -4,12 +4,12 @@
 1. Basic usage (columns setting and data render)
 2. Loading state
 3. Expandable
-4. Selectable
-5. Pagination
-6. Search
-7. Rowspan
-8. Colspan
-9. Highlighit on Hover
-10. Striped Rows
-11. Pointer on Hover
-12. Dense
+4. Pagination
+5. Search
+6. Highlighit on Hover
+7. Striped Rows
+8. Pointer on Hover
+9. Dense
+10. Selectable
+11. RowSpan
+12. ColSpan
