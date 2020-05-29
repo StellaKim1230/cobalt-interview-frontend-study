@@ -49,8 +49,6 @@ $main-color: #282c34;
   border-right: 1px solid rgba(0, 0, 0, 0.1);
   vertical-align: middle;
 
-  // calc(#{$table-td-padding} / 2)rem;
-
   &:last-child {
     border-right : none;
   }
@@ -61,5 +59,9 @@ $main-color: #282c34;
     &:hover, &:active {
       background-color: rgba(0, 0, 0, 0.2);
     }
+  }
+
+  &--isDense {
+    padding: calc(#{$table-td-padding}rem / 2);
   }
 }

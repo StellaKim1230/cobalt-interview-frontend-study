@@ -110,6 +110,7 @@ function App() {
   const [ isHighlightOnHover, setIsHighlightOnHover ] = useState(false)
   const [ isStripedRows, setIsStripedRows ] = useState(false)
   const [ isPointerOnHover, setIsPointerOnHover ] = useState(false)
+  const [ isDense, setIsDense ] = useState(false)
 
   return (
     <div className="App">
@@ -176,6 +177,12 @@ function App() {
           Pointer on Hover
         </label>
       </div>
+      <div>
+        <label>
+          <input type="checkbox" onChange={() => setIsDense(!isDense)} />
+          Dense
+        </label>
+      </div>
       <DataTable
         title="Cat List"
         columns={columns}
@@ -193,6 +200,7 @@ function App() {
         isHighlightOnHover={isHighlightOnHover}
         isStripedRows={isStripedRows}
         isPointerOnHover={isPointerOnHover}
+        isDense={isDense}
       />
     </div>
   );

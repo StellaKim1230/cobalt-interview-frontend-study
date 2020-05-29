@@ -31,6 +31,7 @@ interface Props {
   isHighlightOnHover?: boolean
   isStripedRows?: boolean
   isPointerOnHover?: boolean
+  isDense?: boolean
 }
 
 const selectedData = new Map()
@@ -52,6 +53,7 @@ const DataTable: FC<Props> = ({
   isHighlightOnHover,
   isStripedRows,
   isPointerOnHover,
+  isDense,
 }) => {
   // datasource
   const [ sortOption, setSortOption ] = useState<[string, SortType] | null>(
@@ -204,7 +206,7 @@ const DataTable: FC<Props> = ({
                     const renderedData = column.render({ value, index, row })
                     const props = merge(renderedData.props, { column })
 
-                    return <TableCell {...props} key={column.key}>{renderedData.children}</TableCell>
+                    return <TableCell isDense={isDense} {...props} key={column.key}>{renderedData.children}</TableCell>
                   })}
                 </tr>
                 {expandableRows && isExpand && expandRow === row.id ? (
