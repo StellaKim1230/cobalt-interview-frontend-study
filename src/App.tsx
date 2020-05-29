@@ -109,6 +109,7 @@ function App() {
   const [ isSearch, setIsSearch ] = useState(false)
   const [ isHighlightOnHover, setIsHighlightOnHover ] = useState(false)
   const [ isStripedRows, setIsStripedRows ] = useState(false)
+  const [ isPointerOnHover, setIsPointerOnHover ] = useState(false)
 
   return (
     <div className="App">
@@ -169,6 +170,12 @@ function App() {
           Striped Rows
         </label>
       </div>
+      <div>
+        <label>
+          <input type="checkbox" onChange={() => setIsPointerOnHover(!isPointerOnHover)} />
+          Pointer on Hover
+        </label>
+      </div>
       <DataTable
         title="Cat List"
         columns={columns}
@@ -185,6 +192,7 @@ function App() {
         defaultSearchOption="breeds.name"
         isHighlightOnHover={isHighlightOnHover}
         isStripedRows={isStripedRows}
+        isPointerOnHover={isPointerOnHover}
       />
     </div>
   );

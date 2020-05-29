@@ -30,6 +30,7 @@ interface Props {
   defaultSearchOption?: string
   isHighlightOnHover?: boolean
   isStripedRows?: boolean
+  isPointerOnHover?: boolean
 }
 
 const selectedData = new Map()
@@ -50,6 +51,7 @@ const DataTable: FC<Props> = ({
   defaultSearchOption,
   isHighlightOnHover,
   isStripedRows,
+  isPointerOnHover,
 }) => {
   // datasource
   const [ sortOption, setSortOption ] = useState<[string, SortType] | null>(
@@ -175,6 +177,7 @@ const DataTable: FC<Props> = ({
                 <tr className={cx('TableRow__tr', {
                   'TableRow__tr--isHighlightHover': isHighlightOnHover,
                   'TableRow__tr--isStripedRows': isStripedRows,
+                  'TableRow__tr--isPointerOnHover': isPointerOnHover,
                 })}>
                   {expandableRows ? (
                     <td

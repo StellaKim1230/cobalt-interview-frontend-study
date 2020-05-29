@@ -1,4 +1,5 @@
-@import '../styles/_variables';
+$table-td-padding: .5;
+$main-color: #282c34;
 
 .DataTable {
   width: 100%;
@@ -35,12 +36,20 @@
       background-color: rgb(250, 250, 250);
     }
   }
+
+  &--isPointerOnHover {
+    &:hover {
+      cursor: pointer;
+    }
+  }
 }
 
 .TableRow__td {
-  padding: .5rem;
+  padding: #{$table-td-padding}rem;
   border-right: 1px solid rgba(0, 0, 0, 0.1);
   vertical-align: middle;
+
+  // calc(#{$table-td-padding} / 2)rem;
 
   &:last-child {
     border-right : none;
