@@ -6,3 +6,6 @@
 3. expandable
 4. selectable
 5. pagination
+6. search
+7. rowspan
+8. colspan

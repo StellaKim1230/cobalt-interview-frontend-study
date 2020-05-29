@@ -26,8 +26,8 @@ const TableHead: FC<Props> = ({
   expandableRows,
   selectableRows,
   isDisableSelectAll,
-  toggleSelectAll,
   sortOption,
+  toggleSelectAll,
   setSortOption,
 }) => {
   const onChangeSortData = (e: any) => {

@@ -1,11 +1,12 @@
 import React, { FC, useEffect, useState, Fragment } from 'react'
 
 import cx from 'classnames'
-import { get, find, chunk, isNil } from 'lodash'
+import { get, find, chunk, isNil, isFunction, merge } from 'lodash'
 
 import TableHead from './TableHead'
 import Pagination from './Pagination'
 import SearchInput from './SearchInput'
+import TableCell from './TableCell'
 
 import { TableColumn } from '../@types/model'
 import { SortType, DEFAULT_PAGE_CHUNK_SIZE, DEFAULT_CURRENT_PAGE_INDEX } from '../utils/constants'
@@ -165,40 +166,40 @@ const DataTable: FC<Props> = ({
             />
           ) : null }
           <tbody className="TableRow">
-            {currentData?.map(d => (
-              <Fragment key={d.id}>
+            {currentData?.map((row, index) => (
+              <Fragment key={row.id}>
                 <tr className="TableRow__tr" >
                   {expandableRows ? (
                     <td
                       className={cx('TableRow__td', {
                         'TableRow__td--expandable': expandableRows,
                       })}
-                      onClick={(e) => handleClickExpand(e, d.id)}
+                      onClick={(e) => handleClickExpand(e, row.id)}
                     >→</td>
                   ) : null}
                   {selectableRows ? (
                     <td className="TableRow__td">
                       <input
                         type="checkbox"
-                        value={d.id}
+                        value={row.id}
                         onChange={(e) => toggleSelectRow(e)}
-                        checked={isSelectAll || selectedData.get(d.id)}
+                        checked={isSelectAll || selectedData.get(row.id)}
                       />
                     </td>
                   ) : null}
-                  {columns.map(({ selector, render, style }) => (
-                    <td
-                      key={selector}
-                      className="TableRow__td"
-                      style={style}
-                    >
-                      {render ? render(get(d, selector)) : get(d, selector)}
-                    </td>
-                  ))}
+                  {columns.map((column) => {
+                    const value = get(row, column.selector)
+                    if (!isFunction(column.render)) return <TableCell column={column} key={column.key}>{value}</TableCell>
+
+                    const renderedData = column.render({ value, index, row })
+                    const props = merge(renderedData.props, { column })
+
+                    return <TableCell {...props} key={column.key}>{renderedData.children}</TableCell>
+                  })}
                 </tr>
-                {expandableRows && isExpand && expandRow === d.id ? (
+                {expandableRows && isExpand && expandRow === row.id ? (
                   <tr className="TableRow__tr">
-                    <td colSpan={Object.keys(d).length + 1}>{expandableKey ? get(d, expandableKey) : 'no content'}</td>
+                    <td colSpan={Object.keys(row).length + 1}>{expandableKey ? get(row, expandableKey) : 'no content'}</td>
                   </tr>
                 ) : null}
               </Fragment>
