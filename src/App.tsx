@@ -108,6 +108,7 @@ function App() {
   const [ pagination, setPagination ] = useState(false)
   const [ isSearch, setIsSearch ] = useState(false)
   const [ isHighlightOnHover, setIsHighlightOnHover ] = useState(false)
+  const [ isStripedRows, setIsStripedRows ] = useState(false)
 
   return (
     <div className="App">
@@ -162,6 +163,12 @@ function App() {
           Highlighit on Hover
         </label>
       </div>
+      <div>
+        <label>
+          <input type="checkbox" onChange={() => setIsStripedRows(!isStripedRows)} />
+          Striped Rows
+        </label>
+      </div>
       <DataTable
         title="Cat List"
         columns={columns}
@@ -177,6 +184,7 @@ function App() {
         isSearch={isSearch}
         defaultSearchOption="breeds.name"
         isHighlightOnHover={isHighlightOnHover}
+        isStripedRows={isStripedRows}
       />
     </div>
   );
