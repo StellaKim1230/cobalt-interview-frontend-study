@@ -23,6 +23,12 @@
   &:last-child {
     border-bottom : none;
   }
+
+  &--isHighlightHover {
+    &:hover {
+      background-color: rgba(0, 0, 0, 0.1);
+    }
+  }
 }
 
 .TableRow__td {

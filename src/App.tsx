@@ -14,7 +14,7 @@ const columns: TableColumn[] = [{
   selector: 'id',
   style: {
     color: 'red',
-    backgroundColor: 'rgba(0, 0, 0, .1)',
+    backgroundColor: 'rgba(0, 0, 0, 0.1)',
   },
   render: ({ value, index }) => {
     if (index && index === 6) {
@@ -107,6 +107,7 @@ function App() {
   const [ noTableHead, setNoTableHead ] = useState(false)
   const [ pagination, setPagination ] = useState(false)
   const [ isSearch, setIsSearch ] = useState(false)
+  const [ isHighlightOnHover, setIsHighlightOnHover ] = useState(false)
 
   return (
     <div className="App">
@@ -155,6 +156,12 @@ function App() {
           Search
         </label>
       </div>
+      <div>
+        <label>
+          <input type="checkbox" onChange={() => setIsHighlightOnHover(!isHighlightOnHover)} />
+          Highlighit on Hover
+        </label>
+      </div>
       <DataTable
         title="Cat List"
         columns={columns}
@@ -169,6 +176,7 @@ function App() {
         defaultSortKey="breeds.name"
         isSearch={isSearch}
         defaultSearchOption="breeds.name"
+        isHighlightOnHover={isHighlightOnHover}
       />
     </div>
   );
