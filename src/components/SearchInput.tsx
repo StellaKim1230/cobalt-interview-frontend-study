@@ -5,13 +5,13 @@ import { debounce } from 'lodash'
 import { TableColumn } from '../@types/model'
 
 interface Props {
-  defaultSearchOption?: string
+  defaultSearchKey?: string
   columns?: TableColumn[]
   setSearchOption: React.Dispatch<React.SetStateAction<string>>
   setSearchKeyword: React.Dispatch<React.SetStateAction<string>>
 }
 
-const SearchInput: FC<Props> = ({ defaultSearchOption, columns, setSearchKeyword, setSearchOption }) => {
+const SearchInput: FC<Props> = ({ defaultSearchKey, columns, setSearchKeyword, setSearchOption }) => {
   const onChangeSearchOption = (e: any) => {
     setSearchOption(e.target.value)
   }
@@ -24,7 +24,7 @@ const SearchInput: FC<Props> = ({ defaultSearchOption, columns, setSearchKeyword
 
   return (
     <>
-      <select onChange={(e) => onChangeSearchOption(e)} defaultValue={defaultSearchOption}>
+      <select onChange={(e) => onChangeSearchOption(e)} defaultValue={defaultSearchKey}>
         {columns?.map(column => (
           <option key={column.key} value={column.selector}>
             {column.title}

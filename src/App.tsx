@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 
 import DataTable from './components/DataTable'
+import Checkbox from './components/Checkbox'
 
 import catDataSource from './dummy/cats.json'
 
@@ -106,101 +107,87 @@ function App() {
   const [ isDisableSelectAll, setIsDisableSelectAll ] = useState(false)
   const [ noTableHead, setNoTableHead ] = useState(false)
   const [ pagination, setPagination ] = useState(false)
-  const [ isSearch, setIsSearch ] = useState(false)
-  const [ isHighlightOnHover, setIsHighlightOnHover ] = useState(false)
-  const [ isStripedRows, setIsStripedRows ] = useState(false)
-  const [ isPointerOnHover, setIsPointerOnHover ] = useState(false)
-  const [ isDense, setIsDense ] = useState(false)
+  const [ isShowingSearchInput, setIsShowingSearchInput ] = useState(false)
+  const [ highlightOnHover, setHighlightOnHover ] = useState(false)
+  const [ stripedRows, setStripedRows ] = useState(false)
+  const [ pointerOnHover, setPointerOnHover ] = useState(false)
+  const [ dense, setDense ] = useState(false)
+
+  const menus = [{
+    title: 'Simulate Loading State',
+    onChange: () => setIsLoading(!isLoading),
+  }, {
+    title: 'Expandable Rows',
+    onChange: () => setExpandableRows(!expandableRows),
+  }, {
+    title: 'Pagination',
+    onChange: () => setPagination(!pagination),
+  }, {
+    title: 'Search',
+    onChange: () => setIsShowingSearchInput(!isShowingSearchInput),
+  }, {
+    title: 'Highlighit on Hover',
+    onChange: () => setHighlightOnHover(!highlightOnHover),
+  }, {
+    title: 'Striped Rows',
+    onChange: () => setStripedRows(!stripedRows),
+  }, {
+    title: 'Pointer on Hover',
+    onChange: () => setPointerOnHover(!pointerOnHover),
+  }, {
+    title: 'Dense',
+    onChange: () => setDense(!dense),
+  }, {
+    title: 'Selectable Rows',
+    onChange: () => setSelectableRows(!selectableRows),
+  }]
 
   return (
     <div className="App">
       <header className="App-header">
         <h1>코발트 코딩 과제 - 프론트 엔드</h1>
       </header>
-      <div>
-        <label>
-          <input type="checkbox" onChange={() => setIsLoading(!isLoading)} />
-          Simulate Loading State
-        </label>
-      </div>
-      <div>
-        <label>
-          <input type="checkbox" onChange={() => setExpandableRows(!expandableRows)} />
-          Expandable Rows
-        </label>
-      </div>
-      <div>
-        <label>
-          <input type="checkbox" onChange={() => setSelectableRows(!selectableRows)} />
-          Selectable Rows
-        </label>
-      </div>
+      <ul>
+        {menus.map(({ title, onChange }) => (
+          <li key={title}>
+            <Checkbox title={title} onChange={onChange} />
+          </li>
+        ))}
       {selectableRows && (
         <>
-          <label>
-            <input type="checkbox" onChange={() => setIsDisableSelectAll(!isDisableSelectAll)} />
-              Disable Select All Rows
-          </label>
-          <label>
-          <input type="checkbox" onChange={() => setNoTableHead(!noTableHead)} />
-              No Table Head
-          </label>
+          <li>
+            <label>
+              <input type="checkbox" onChange={() => setIsDisableSelectAll(!isDisableSelectAll)} />
+                Disable Select All Rows
+            </label>
+          </li>
+          <li>
+            <label>
+            <input type="checkbox" onChange={() => setNoTableHead(!noTableHead)} />
+                No Table Head
+            </label>
+          </li>
         </>
       )}
-      <div>
-        <label>
-          <input type="checkbox" onChange={() => setPagination(!pagination)} />
-          Pagination
-        </label>
-      </div>
-      <div>
-        <label>
-          <input type="checkbox" onChange={() => setIsSearch(!isSearch)} />
-          Search
-        </label>
-      </div>
-      <div>
-        <label>
-          <input type="checkbox" onChange={() => setIsHighlightOnHover(!isHighlightOnHover)} />
-          Highlighit on Hover
-        </label>
-      </div>
-      <div>
-        <label>
-          <input type="checkbox" onChange={() => setIsStripedRows(!isStripedRows)} />
-          Striped Rows
-        </label>
-      </div>
-      <div>
-        <label>
-          <input type="checkbox" onChange={() => setIsPointerOnHover(!isPointerOnHover)} />
-          Pointer on Hover
-        </label>
-      </div>
-      <div>
-        <label>
-          <input type="checkbox" onChange={() => setIsDense(!isDense)} />
-          Dense
-        </label>
-      </div>
+      </ul>
       <DataTable
         title="Cat List"
         columns={columns}
         data={catDataSource}
+        expandableKey='breeds.description'
+        defaultSortKey="breeds.name"
+        defaultSearchKey="breeds.name"
         isLoading={isLoading}
         expandableRows={expandableRows}
-        expandableKey='breeds.description'
         selectableRows={selectableRows}
         isDisableSelectAll={isDisableSelectAll}
         noTableHead={noTableHead}
         pagination={pagination}
-        defaultSortKey="breeds.name"
-        isSearch={isSearch}
-        defaultSearchOption="breeds.name"
-        isHighlightOnHover={isHighlightOnHover}
-        isStripedRows={isStripedRows}
-        isPointerOnHover={isPointerOnHover}
-        isDense={isDense}
+        isShowingSearchInput={isShowingSearchInput}
+        highlightOnHover={highlightOnHover}
+        stripedRows={stripedRows}
+        pointerOnHover={pointerOnHover}
+        dense={dense}
       />
     </div>
   );
