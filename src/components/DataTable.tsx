@@ -155,9 +155,7 @@ const DataTable: FC<Props> = ({
         />
       ) : null}
       <h2 className="DataTable__title">{title}</h2>
-      {getSelectedItemCount() !== 0 ? (
-        <div>{getSelectedItemCount()} items selected</div>
-      ) : null}
+      {getSelectedItemCount() !== 0 ? (<div>{getSelectedItemCount()} items selected</div>) : null}
       {isLoading ? (
         <p>Loading...</p>
       ) : (
@@ -166,10 +164,10 @@ const DataTable: FC<Props> = ({
             <TableHead
               columns={columns}
               expandableRows={expandableRows}
-              isDisableSelectAll={isDisableSelectAll}
               selectableRows={selectableRows}
-              toggleSelectAll={toggleSelectAll}
+              isDisableSelectAll={isDisableSelectAll}
               sortOption={sortOption}
+              toggleSelectAll={toggleSelectAll}
               setSortOption={setSortOption}
             />
           ) : null }
@@ -206,7 +204,7 @@ const DataTable: FC<Props> = ({
                     if (!isFunction(render)) return <TableCell style={style} key={key}>{value}</TableCell>
 
                     const renderedData = render({ value, index, row })
-                    const props = merge(renderedData.props, { style: style })
+                    const props = merge(renderedData.props, { style })
 
                     return <TableCell dense={dense} {...props} key={key}>{renderedData.children}</TableCell>
                   })}

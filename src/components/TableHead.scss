@@ -1,9 +1,10 @@
 .TableHead {
-  border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+  background-color: rgba(0, 0, 0, 0.1);
 }
 
 .TableHead__th {
   padding: .5rem;
+  border: 1px solid rgba(0, 0, 0, 0.1);
 
   &--disabled {
     visibility: hidden;

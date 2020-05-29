@@ -4,6 +4,8 @@ import { debounce } from 'lodash'
 
 import { TableColumn } from '../@types/model'
 
+import './SearchInput.scss'
+
 interface Props {
   defaultSearchKey?: string
   columns?: TableColumn[]
@@ -24,7 +26,7 @@ const SearchInput: FC<Props> = ({ defaultSearchKey, columns, setSearchKeyword, s
 
   return (
     <>
-      <select onChange={(e) => onChangeSearchOption(e)} defaultValue={defaultSearchKey}>
+      <select className="SearchInput__select" onChange={(e) => onChangeSearchOption(e)} defaultValue={defaultSearchKey}>
         {columns?.map(column => (
           <option key={column.key} value={column.selector}>
             {column.title}

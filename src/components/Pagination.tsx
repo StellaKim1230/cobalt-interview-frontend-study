@@ -2,6 +2,8 @@ import React, { FC } from 'react'
 
 import { PAGE_CHUNK_SIZE_OPTION, DEFAULT_PAGE_CHUNK_SIZE } from '../utils/constants'
 
+import './Pagination.scss'
+
 interface Props {
   currentPageIndex: number
   pageTotalSize: number
@@ -17,13 +19,15 @@ const Pagination: FC<Props> = ({
   setPageIndex,
   setPageChunkSize,
 }) => {
-  const onChangePage = (e: any) => {
-    setPageChunkSize(e.target.value)
-  }
+  const onChangePage = (e: any) => setPageChunkSize(e.target.value)
 
   return (
     <>
-      <select onChange={(e) => onChangePage(e)} defaultValue={DEFAULT_PAGE_CHUNK_SIZE}>
+      <select
+        className="Pagination__select"
+        onChange={(e) => onChangePage(e)}
+        defaultValue={DEFAULT_PAGE_CHUNK_SIZE}
+      >
         {PAGE_CHUNK_SIZE_OPTION.map(option => (
           <option
             key={option.value}
@@ -33,22 +37,38 @@ const Pagination: FC<Props> = ({
           </option>
         ))}
       </select>
-      <div>
-        <button type="button" onClick={() => setPageIndex(0)} disabled={currentPageIndex === 0}>맨 앞으로</button>
-      </div>
-      <div>
-        <button type="button" onClick={() => setPageIndex(currentPageIndex - 1)} disabled={currentPageIndex === 0}>
-          한 페이지 앞으로
-        </button>
-      </div>
-      <div>
-        <button type="button" onClick={() => setPageIndex(currentPageIndex + 1)} disabled={currentPageIndex > pageTotalSize}>
-          한 페이지 뒤로
-        </button>
-      </div>
-      <div>
-        <button type="button" onClick={() => setPageIndex(pageTotalSize)} disabled={pageTotalSize < pageChunkSize}>맨 뒤로</button>
-      </div>
+      <button
+        type="button"
+        className="Pagination__button"
+        onClick={() => setPageIndex(0)}
+        disabled={currentPageIndex === 0}
+      >
+        {'<<'}
+      </button>
+      <button
+        type="button"
+        className="Pagination__button"
+        onClick={() => setPageIndex(currentPageIndex - 1)}
+        disabled={currentPageIndex === 0}
+      >
+        {'<'}
+      </button>
+      <button
+        type="button"
+        className="Pagination__button"
+        onClick={() => setPageIndex(currentPageIndex + 1)}
+        disabled={currentPageIndex > pageTotalSize}
+      >
+        {'>'}
+      </button>
+      <button
+        type="button"
+        className="Pagination__button"
+        onClick={() => setPageIndex(pageTotalSize)}
+        disabled={pageTotalSize < pageChunkSize}
+      >
+        {'>>'}
+      </button>
     </>
   )
 }

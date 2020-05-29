@@ -5,12 +5,12 @@ import cx from 'classnames'
 import './TableCell.scss'
 
 interface Props extends TdHTMLAttributes<HTMLTableDataCellElement> {
+  className?: string
   style?: CSSProperties
   dense?: boolean
-  className?: string
 }
 
-const TableCell: FC<Props> = ({ style, colSpan, rowSpan, dense, children, className, onClick }) => {
+const TableCell: FC<Props> = ({ className, style, dense, colSpan, rowSpan, children, onClick }) => {
   if (colSpan === 0 || rowSpan === 0) return null
 
   return (

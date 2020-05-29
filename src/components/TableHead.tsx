@@ -11,9 +11,8 @@ import './TableHead.scss'
 interface Props {
   columns: TableColumn[]
   expandableRows?: boolean
-  isDisableSelectAll?: boolean
   selectableRows?: boolean
-  sortedKey?: string | number | undefined
+  isDisableSelectAll?: boolean
   sortOption: [string, SortType] | null
   toggleSelectAll?: () => void
   setSortOption: React.Dispatch<React.SetStateAction<Props['sortOption']>>

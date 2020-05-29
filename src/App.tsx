@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState } from 'react'
 
 import DataTable from './components/DataTable'
 import Checkbox from './components/Checkbox'
@@ -7,7 +7,7 @@ import catDataSource from './dummy/cats.json'
 
 import { TableColumn } from './@types/model'
 
-import './App.scss';
+import './App.scss'
 
 const columns: TableColumn[] = [{
   key: 'id',
@@ -15,7 +15,6 @@ const columns: TableColumn[] = [{
   selector: 'id',
   style: {
     color: 'red',
-    backgroundColor: 'rgba(0, 0, 0, 0.1)',
   },
   render: ({ value, index }) => {
     if (index && index === 6) {
@@ -147,28 +146,28 @@ function App() {
       <header className="App-header">
         <h1>코발트 코딩 과제 - 프론트 엔드</h1>
       </header>
-      <ul>
+      <ul className="MenuList">
         {menus.map(({ title, onChange }) => (
-          <li key={title}>
+          <li key={title} className="MenuList__li">
             <Checkbox title={title} onChange={onChange} />
           </li>
         ))}
-      {selectableRows && (
-        <>
-          <li>
-            <label>
-              <input type="checkbox" onChange={() => setIsDisableSelectAll(!isDisableSelectAll)} />
-                Disable Select All Rows
-            </label>
-          </li>
-          <li>
-            <label>
-            <input type="checkbox" onChange={() => setNoTableHead(!noTableHead)} />
-                No Table Head
-            </label>
-          </li>
-        </>
-      )}
+        {selectableRows && (
+          <>
+            <li className="MenuList__li">
+              <label>
+                <input type="checkbox" onChange={() => setIsDisableSelectAll(!isDisableSelectAll)} />
+                  Disable Select All Rows
+              </label>
+            </li>
+            <li className="MenuList__li">
+              <label>
+              <input type="checkbox" onChange={() => setNoTableHead(!noTableHead)} />
+                  No Table Head
+              </label>
+            </li>
+          </>
+        )}
       </ul>
       <DataTable
         title="Cat List"
@@ -190,7 +189,7 @@ function App() {
         dense={dense}
       />
     </div>
-  );
+  )
 }
 
-export default App;
+export default App

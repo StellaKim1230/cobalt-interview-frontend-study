@@ -2,6 +2,7 @@ $main-color: #282c34;
 
 .DataTable {
   width: 100%;
+  margin-bottom: 1rem;
 }
 
 .DataTable__title {
@@ -14,7 +15,6 @@ $main-color: #282c34;
 
 .TableRow {
   border: 1px solid rgba(0, 0, 0, 0.2);
-  border-top: none;
 }
 
 .TableRow__tr {
