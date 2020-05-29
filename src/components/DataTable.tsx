@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState, Fragment } from 'react'
+import React, { FC, useEffect, useState, Fragment, useCallback } from 'react'
 
 import cx from 'classnames'
 import { get, find, chunk, isNil, isFunction, merge, eq, includes } from 'lodash'
@@ -63,7 +63,7 @@ const DataTable: FC<Props> = ({
 
   // expandable rows
   const [ isExpand, setIsExpand ] = useState(false)
-  const [ expandRow, setExpandRow ] = useState('')
+  const [ expandRow, setExpandRow ] = useState<string | null>(null)
 
   // selected rows
   const [ isSelectAll, setIsSelectAll ] = useState(false)
@@ -85,8 +85,19 @@ const DataTable: FC<Props> = ({
   // 실제 사용될 데이터
   const [ currentData, setCurrentData ] = useState<any[]>(pagination ? chunkedData[pageIndex] : sortedData)
 
-  const handleClickExpand = (e: React.MouseEvent, id: string) => {
-    setIsExpand(!isExpand)
+  const handleClickExpand = (id: string) => {
+    if (isNil(expandRow)) {
+      setIsExpand(true)
+      setExpandRow(id)
+      return
+    }
+
+    if (expandRow === id) {
+      setIsExpand(false)
+      setExpandRow(null)
+      return
+    }
+
     setExpandRow(id)
   }
 
@@ -189,7 +200,7 @@ const DataTable: FC<Props> = ({
                       className={cx({
                         'TableCell--expandable': expandableRows,
                       })}
-                      onClick={(e) => handleClickExpand(e, row.id)}
+                      onClick={() => handleClickExpand(row.id)}
                     >
                       →
                     </TableCell>
