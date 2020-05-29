@@ -17,7 +17,7 @@ const columns: TableColumn[] = [{
     color: 'red',
   },
   render: ({ value, index }) => {
-    if (index && index === 6) {
+    if (index === 6) {
       return {
         children: value,
         props: {
@@ -25,7 +25,7 @@ const columns: TableColumn[] = [{
         }
       }
     }
-    if (index && index === 7) {
+    if (index === 7) {
       return {
         children: value,
         props: {
@@ -41,7 +41,7 @@ const columns: TableColumn[] = [{
   selector: 'breeds.name',
   sortable: true,
   render: ({ value, index }) => {
-    if (index && index === 4) {
+    if (index === 4) {
       return {
         children: value,
         props: {
@@ -57,7 +57,7 @@ const columns: TableColumn[] = [{
   selector: 'breeds.origin',
   sortable: true,
   render: ({ value, index }) => {
-    if (index && index === 4) {
+    if (index === 4) {
       return {
         children: value,
         props: {
@@ -72,7 +72,7 @@ const columns: TableColumn[] = [{
   title: '몸무게',
   selector: 'breeds.weight.imperial',
   render: ({ value, index }) => {
-    if (index && index === 4) {
+    if (index === 4) {
       return {
         children: `${value} kg`,
         props: {
@@ -87,7 +87,7 @@ const columns: TableColumn[] = [{
   title: '수명',
   selector: 'breeds.life_span',
   render: ({ value, index }) => {
-    if (index && index === 4) {
+    if (index === 4) {
       return {
         children: `${value} 년`,
         props: {
