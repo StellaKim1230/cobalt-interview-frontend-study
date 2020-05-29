@@ -64,7 +64,9 @@ const TableHead: FC<Props> = ({
         {columns.map(({ key, title, style, sortable, selector }) => (
           <th
             key={key}
-            className="TableHead__th"
+            className={cx('TableHead__th', {
+              'TableHead__th--sortable': sortable,
+            })}
             style={style}
             data-sortfield={sortable && !isNil(setSortOption) && selector}
           >
