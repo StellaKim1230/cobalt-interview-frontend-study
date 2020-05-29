@@ -18,20 +18,20 @@ interface Props {
   title: string
   columns: TableColumn[]
   data: any[]
+  expandableKey?: string
+  defaultSortKey?: string
+  defaultSearchKey?: string
   isLoading?: boolean
   expandableRows?: boolean
-  expandableKey?: string
   selectableRows?: boolean
   isDisableSelectAll?: boolean
   noTableHead?: boolean
   pagination?: boolean
-  defaultSortKey?: string
-  isSearch?: boolean
-  defaultSearchOption?: string
-  isHighlightOnHover?: boolean
-  isStripedRows?: boolean
-  isPointerOnHover?: boolean
-  isDense?: boolean
+  isShowingSearchInput?: boolean
+  highlightOnHover?: boolean
+  stripedRows?: boolean
+  pointerOnHover?: boolean
+  dense?: boolean
 }
 
 const selectedData = new Map()
@@ -40,20 +40,20 @@ const DataTable: FC<Props> = ({
   title,
   columns,
   data,
+  expandableKey,
+  defaultSortKey,
+  defaultSearchKey,
   isLoading,
   expandableRows,
-  expandableKey,
   selectableRows,
   isDisableSelectAll,
   noTableHead,
   pagination,
-  defaultSortKey,
-  isSearch,
-  defaultSearchOption,
-  isHighlightOnHover,
-  isStripedRows,
-  isPointerOnHover,
-  isDense,
+  isShowingSearchInput,
+  highlightOnHover,
+  stripedRows,
+  pointerOnHover,
+  dense,
 }) => {
   // datasource
   const [ sortOption, setSortOption ] = useState<[string, SortType] | null>(
@@ -74,7 +74,7 @@ const DataTable: FC<Props> = ({
   const [ pageIndex, setPageIndex ] = useState(DEFAULT_CURRENT_PAGE_INDEX)
 
   // search
-  const [ searchOption, setSearchOption ] = useState(defaultSearchOption || '')
+  const [ searchOption, setSearchOption ] = useState(defaultSearchKey || '')
   const [ searchKeyword, setSearchKeyword ] = useState('')
 
   const [ chunkedData, setChunkedData ] = useState(
@@ -146,9 +146,9 @@ const DataTable: FC<Props> = ({
 
   return (
     <>
-      {isSearch ? (
+      {isShowingSearchInput ? (
         <SearchInput
-          defaultSearchOption={defaultSearchOption}
+          defaultSearchKey={defaultSearchKey}
           columns={columns}
           setSearchOption={setSearchOption}
           setSearchKeyword={setSearchKeyword}
@@ -177,41 +177,45 @@ const DataTable: FC<Props> = ({
             {currentData?.map((row, index) => (
               <Fragment key={row.id}>
                 <tr className={cx('TableRow__tr', {
-                  'TableRow__tr--isHighlightHover': isHighlightOnHover,
-                  'TableRow__tr--isStripedRows': isStripedRows,
-                  'TableRow__tr--isPointerOnHover': isPointerOnHover,
+                  'TableRow__tr--isHighlightHover': highlightOnHover,
+                  'TableRow__tr--stripedRows': stripedRows,
+                  'TableRow__tr--pointerOnHover': pointerOnHover,
                 })}>
                   {expandableRows ? (
-                    <td
-                      className={cx('TableRow__td', {
-                        'TableRow__td--expandable': expandableRows,
+                    <TableCell
+                      className={cx({
+                        'TableCell--expandable': expandableRows,
                       })}
                       onClick={(e) => handleClickExpand(e, row.id)}
-                    >→</td>
+                    >
+                      →
+                    </TableCell>
                   ) : null}
                   {selectableRows ? (
-                    <td className="TableRow__td">
+                    <TableCell>
                       <input
                         type="checkbox"
                         value={row.id}
                         onChange={(e) => toggleSelectRow(e)}
                         checked={isSelectAll || selectedData.get(row.id)}
                       />
-                    </td>
+                    </TableCell>
                   ) : null}
-                  {columns.map((column) => {
-                    const value = get(row, column.selector)
-                    if (!isFunction(column.render)) return <TableCell column={column} key={column.key}>{value}</TableCell>
+                  {columns.map(({ selector, render, style, key }) => {
+                    const value = get(row, selector)
+                    if (!isFunction(render)) return <TableCell style={style} key={key}>{value}</TableCell>
 
-                    const renderedData = column.render({ value, index, row })
-                    const props = merge(renderedData.props, { column })
+                    const renderedData = render({ value, index, row })
+                    const props = merge(renderedData.props, { style: style })
 
-                    return <TableCell isDense={isDense} {...props} key={column.key}>{renderedData.children}</TableCell>
+                    return <TableCell dense={dense} {...props} key={key}>{renderedData.children}</TableCell>
                   })}
                 </tr>
                 {expandableRows && isExpand && expandRow === row.id ? (
                   <tr className="TableRow__tr">
-                    <td colSpan={Object.keys(row).length + 1}>{expandableKey ? get(row, expandableKey) : 'no content'}</td>
+                    <TableCell colSpan={Object.keys(row).length + 1}>
+                      {expandableKey ? get(row, expandableKey) : 'no content'}
+                    </TableCell>
                   </tr>
                 ) : null}
               </Fragment>

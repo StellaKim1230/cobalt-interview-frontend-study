@@ -1,0 +1,23 @@
+$table-td-padding: .5;
+
+.TableCell {
+  padding: #{$table-td-padding}rem;
+  border-right: 1px solid rgba(0, 0, 0, 0.1);
+  vertical-align: middle;
+
+  &:last-child {
+    border-right : none;
+  }
+
+  &--expandable {
+    cursor: pointer;
+
+    &:hover, &:active {
+      background-color: rgba(0, 0, 0, 0.2);
+    }
+  }
+
+  &--dense {
+    padding: calc(#{$table-td-padding}rem / 2);
+  }
+}

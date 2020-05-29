@@ -1,23 +1,27 @@
-import React, { FC, TdHTMLAttributes } from 'react'
+import React, { FC, TdHTMLAttributes, CSSProperties } from 'react'
 
 import cx from 'classnames'
 
-import { TableColumn } from '../@types/model'
+import './TableCell.scss'
 
 interface Props extends TdHTMLAttributes<HTMLTableDataCellElement> {
-  column: TableColumn
-  isDense?: boolean
+  style?: CSSProperties
+  dense?: boolean
+  className?: string
 }
 
-const TableCell: FC<Props> = ({ column, colSpan, rowSpan, isDense, children }) => {
+const TableCell: FC<Props> = ({ style, colSpan, rowSpan, dense, children, className, onClick }) => {
   if (colSpan === 0 || rowSpan === 0) return null
 
   return (
     <td
-      className={cx('TableRow__td', { 'TableRow__td--isDense': isDense })}
-      style={column.style}
+      className={cx('TableCell', className, {
+        'TableCell--dense': dense
+      })}
+      style={style}
       colSpan={colSpan}
       rowSpan={rowSpan}
+      onClick={onClick}
     >
       {children}
     </td>
