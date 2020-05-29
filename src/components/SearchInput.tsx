@@ -8,16 +8,16 @@ import { SearchType } from '../utils/constants'
 import './SearchInput.scss'
 
 interface Props {
-  defaultSearchKey?: string
+  defaultSearchSelector?: string
   columns?: TableColumn[]
-  setSearchColumn: React.Dispatch<React.SetStateAction<string>>
-  setSearchKeyword: React.Dispatch<React.SetStateAction<string>>
+  setSearchSelector: React.Dispatch<React.SetStateAction<string>>
+  setSearchKeyword: React.Dispatch<React.SetStateAction<string | null>>
   setSearchType: React.Dispatch<React.SetStateAction<SearchType>>
 }
 
-const SearchInput: FC<Props> = ({ defaultSearchKey, columns, setSearchKeyword, setSearchColumn, setSearchType }) => {
+const SearchInput: FC<Props> = ({ defaultSearchSelector, columns, setSearchKeyword, setSearchSelector, setSearchType }) => {
   const onChangeSearchColumn = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setSearchColumn(e.target.value)
+    setSearchSelector(e.target.value)
   }
 
   const onChangeSearchType = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -31,8 +31,8 @@ const SearchInput: FC<Props> = ({ defaultSearchKey, columns, setSearchKeyword, s
   }
 
   return (
-    <>
-      <select className="SearchInput__select" onChange={onChangeSearchColumn} defaultValue={defaultSearchKey}>
+    <div className="SearchInput">
+      <select className="SearchInput__select" onChange={onChangeSearchColumn} defaultValue={defaultSearchSelector}>
         {columns?.map(column => (
           <option key={column.key} value={column.selector}>
             {column.title}
@@ -44,7 +44,7 @@ const SearchInput: FC<Props> = ({ defaultSearchKey, columns, setSearchKeyword, s
         <option value={SearchType.CONTAIN}>contain</option>
       </select>
       <input type="text" onChange={onChangeSearchKeyword} placeholder="search text"/>
-    </>
+    </div>
   )
 }
 

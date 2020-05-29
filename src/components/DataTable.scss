@@ -1,10 +1,5 @@
 $main-color: #282c34;
 
-.DataTable {
-  width: 100%;
-  margin-bottom: 1rem;
-}
-
 .DataTable__title {
   color: $main-color;
   font-weight: bold;
@@ -13,18 +8,27 @@ $main-color: #282c34;
   margin-bottom: 1rem;
 }
 
-.TableRow {
+.DataTable__selectedCount {
+  margin-bottom: 1rem;
+}
+
+.DataTable__table {
+  width: 100%;
+  margin-bottom: 1rem;
+}
+
+.DataTable__body {
   border: 1px solid rgba(0, 0, 0, 0.2);
 }
 
-.TableRow__tr {
+.DataTable__row {
   border-bottom: 1px solid rgba(0, 0, 0, 0.1);
 
   &:last-child {
     border-bottom : none;
   }
 
-  &--isHighlightHover {
+  &--highlightHover {
     &:hover {
       background-color: rgba(0, 0, 0, 0.1);
     }

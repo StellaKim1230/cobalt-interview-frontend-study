@@ -1,12 +1,12 @@
 import React, { FC } from 'react'
 
-import { PAGE_CHUNK_SIZE_OPTION, DEFAULT_PAGE_CHUNK_SIZE } from '../utils/constants'
+import { PAGE_CHUNK_SIZE_OPTION, PageChunkSizeOption } from '../utils/constants'
 
 import './Pagination.scss'
 
 const getPageRange = (currentPageIndex: number, pageChunkSize: number) => ({
   firstPage: currentPageIndex * pageChunkSize + 1,
-  lastPage: (currentPageIndex + 1) * pageChunkSize
+  lastPage: (currentPageIndex + 1) * pageChunkSize,
 })
 interface Props {
   currentPageIndex: number
@@ -14,7 +14,7 @@ interface Props {
   totalDataSize: number
   pageChunkSize: number
   setPageIndex: React.Dispatch<React.SetStateAction<number>>
-  setPageChunkSize: React.Dispatch<React.SetStateAction<number>>
+  setPageChunkSize: React.Dispatch<React.SetStateAction<PageChunkSizeOption>>
 }
 
 const Pagination: FC<Props> = ({
@@ -25,27 +25,26 @@ const Pagination: FC<Props> = ({
   setPageIndex,
   setPageChunkSize,
 }) => {
-  const onChangePage = (e: any) => setPageChunkSize(e.target.value)
-
   const { firstPage, lastPage } = getPageRange(currentPageIndex, pageChunkSize)
+  const onChangePage = (e: React.ChangeEvent<HTMLSelectElement>) => setPageChunkSize(parseInt(e.target.value, 10) as PageChunkSizeOption)
 
   return (
     <div className="Pagination">
       <select
         className="Pagination__select"
         onChange={(e) => onChangePage(e)}
-        defaultValue={DEFAULT_PAGE_CHUNK_SIZE}
+        defaultValue={pageChunkSize}
       >
         {PAGE_CHUNK_SIZE_OPTION.map(option => (
           <option
-            key={option.value}
-            value={option.value}
+            key={option}
+            value={option}
           >
-            {option.title}
+            {option} page
           </option>
         ))}
       </select>
-        <span>{firstPage}-{lastPage > totalDataSize ? totalDataSize : lastPage} of {totalDataSize}</span>
+      <span>{firstPage}-{lastPage > totalDataSize ? totalDataSize : lastPage} of {totalDataSize}</span>
       <ul className="Pagination__buttonList">
         <li className="Pagination__button">
           <button
@@ -69,7 +68,7 @@ const Pagination: FC<Props> = ({
           <button
             type="button"
             onClick={() => setPageIndex(currentPageIndex + 1)}
-            disabled={currentPageIndex >= lastPageIndex}
+            disabled={lastPageIndex <= currentPageIndex}
           >
             {'>'}
           </button>
@@ -78,7 +77,7 @@ const Pagination: FC<Props> = ({
           <button
             type="button"
             onClick={() => setPageIndex(lastPageIndex)}
-            disabled={currentPageIndex >= lastPageIndex}
+            disabled={lastPageIndex <= currentPageIndex}
           >
             {'>>'}
           </button>

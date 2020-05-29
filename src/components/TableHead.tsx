@@ -3,8 +3,8 @@ import React, { FC, } from 'react'
 import cx from 'classnames'
 import { isNil } from 'lodash'
 
-import { SortType } from '../utils/constants'
 import { TableColumn } from '../@types/model'
+import { SortType, SORT_SELECTOR_INDEX, SORT_TYPE_INDEX } from '../utils/constants'
 
 import './TableHead.scss'
 
@@ -14,7 +14,7 @@ interface Props {
   selectableRows?: boolean
   isDisableSelectAll?: boolean
   sortOption: [string, SortType] | null
-  toggleSelectAll?: () => void
+  onSelectAll?: () => void
   setSortOption: React.Dispatch<React.SetStateAction<Props['sortOption']>>
 }
 
@@ -26,7 +26,7 @@ const TableHead: FC<Props> = ({
   selectableRows,
   isDisableSelectAll,
   sortOption,
-  toggleSelectAll,
+  onSelectAll,
   setSortOption,
 }) => {
   const onChangeSortData = (e: any) => {
@@ -35,14 +35,14 @@ const TableHead: FC<Props> = ({
       return
     }
 
-    const isAlreadySorted = sortOption?.[0] === selector
+    const isAlreadySorted = sortOption?.[SORT_SELECTOR_INDEX] === selector
 
     if (isNil(sortOption) || !isAlreadySorted) {
       setSortOption([selector, SortType.ASC])
       return
     }
 
-    setSortOption([selector, sortOption[1] === SortType.ASC ? SortType.DESC : SortType.ASC])
+    setSortOption([selector, sortOption[SORT_TYPE_INDEX] === SortType.ASC ? SortType.DESC : SortType.ASC])
   }
 
   return (
@@ -57,7 +57,7 @@ const TableHead: FC<Props> = ({
           })}>
             <input
               type="checkbox"
-              onChange={toggleSelectAll}
+              onChange={onSelectAll}
             />
           </th>
         ) : null}
@@ -71,8 +71,8 @@ const TableHead: FC<Props> = ({
             data-sortfield={sortable && !isNil(setSortOption) && selector}
           >
             {title}
-            {sortable && !isNil(sortOption) && sortOption[0] === selector
-              ? getSortIcon(sortOption[1])
+            {sortable && !isNil(sortOption) && sortOption[SORT_SELECTOR_INDEX] === selector
+              ? getSortIcon(sortOption[SORT_TYPE_INDEX])
               : null}
           </th>
         ))}

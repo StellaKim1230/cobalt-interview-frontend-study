@@ -10,7 +10,7 @@ interface Props extends TdHTMLAttributes<HTMLTableDataCellElement> {
   dense?: boolean
 }
 
-const TableCell: FC<Props> = ({ className, style, dense, colSpan, rowSpan, children, onClick }) => {
+const TableCell: FC<Props> = ({ className, style, dense, colSpan, rowSpan, children }) => {
   if (colSpan === 0 || rowSpan === 0) return null
 
   return (
@@ -21,7 +21,6 @@ const TableCell: FC<Props> = ({ className, style, dense, colSpan, rowSpan, child
       style={style}
       colSpan={colSpan}
       rowSpan={rowSpan}
-      onClick={onClick}
     >
       {children}
     </td>

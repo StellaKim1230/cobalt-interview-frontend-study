@@ -3,9 +3,8 @@ import React, { useState } from 'react'
 import DataTable from './components/DataTable'
 import Checkbox from './components/Checkbox'
 
-import catDataSource from './dummy/cats.json'
-
 import { TableColumn } from './@types/model'
+import catDataSource from './dummy/cats.json'
 
 import './App.scss'
 
@@ -36,7 +35,7 @@ const columns: TableColumn[] = [{
     return { children: value }
   }
 }, {
-  key: 'breeds.name',
+  key: 'name',
   title: '이름',
   selector: 'breeds.name',
   sortable: true,
@@ -52,7 +51,7 @@ const columns: TableColumn[] = [{
     return { children: value }
   }
 }, {
-  key: 'breeds.origin',
+  key: 'origin',
   title: '원산지',
   selector: 'breeds.origin',
   sortable: true,
@@ -68,7 +67,7 @@ const columns: TableColumn[] = [{
     return { children: value }
   }
 }, {
-  key: 'breeds.imperial',
+  key: 'imperial',
   title: '몸무게',
   selector: 'breeds.weight.imperial',
   render: ({ value, index }) => {
@@ -83,7 +82,7 @@ const columns: TableColumn[] = [{
     return { children: `${value} kg` }
   }
 }, {
-  key: 'breeds.life_span',
+  key: 'lifeSpan',
   title: '수명',
   selector: 'breeds.life_span',
   render: ({ value, index }) => {
@@ -146,48 +145,51 @@ function App() {
       <header className="App-header">
         <h1>코발트 코딩 과제 - 프론트 엔드</h1>
       </header>
-      <ul className="MenuList">
-        {menus.map(({ title, onChange }) => (
-          <li key={title} className="MenuList__li">
-            <Checkbox title={title} onChange={onChange} />
-          </li>
-        ))}
-        {selectableRows && (
-          <>
-            <li className="MenuList__li">
-              <label>
-                <input type="checkbox" onChange={() => setIsDisableSelectAll(!isDisableSelectAll)} />
-                  Disable Select All Rows
-              </label>
+      <main>
+        <ul className="MenuList">
+          {menus.map(({ title, onChange }) => (
+            <li key={title} className="MenuList__li">
+              <Checkbox title={title} onChange={onChange} />
             </li>
-            <li className="MenuList__li">
-              <label>
-              <input type="checkbox" onChange={() => setNoTableHead(!noTableHead)} />
-                  No Table Head
-              </label>
-            </li>
-          </>
-        )}
-      </ul>
-      <DataTable
-        title="Cat List"
-        columns={columns}
-        data={catDataSource}
-        expandableKey='breeds.description'
-        defaultSortKey="breeds.name"
-        defaultSearchKey="breeds.name"
-        isLoading={isLoading}
-        expandableRows={expandableRows}
-        selectableRows={selectableRows}
-        isDisableSelectAll={isDisableSelectAll}
-        noTableHead={noTableHead}
-        pagination={pagination}
-        isShowingSearchInput={isShowingSearchInput}
-        highlightOnHover={highlightOnHover}
-        stripedRows={stripedRows}
-        pointerOnHover={pointerOnHover}
-        dense={dense}
-      />
+          ))}
+          {selectableRows && (
+            <>
+              <li className="MenuList__li">
+                <label>
+                  <input type="checkbox" onChange={() => setIsDisableSelectAll(!isDisableSelectAll)} />
+                    Disable Select All Rows
+                </label>
+              </li>
+              <li className="MenuList__li">
+                <label>
+                  <input type="checkbox" onChange={() => setNoTableHead(!noTableHead)} />
+                    No Table Head
+                </label>
+              </li>
+            </>
+          )}
+        </ul>
+        <DataTable
+          title="Cat List"
+          columns={columns}
+          data={catDataSource}
+          expandableRowSelector='breeds.description'
+          defaultSortSelector="breeds.name"
+          defaultSearchSelector="breeds.name"
+          isLoading={isLoading}
+          expandableRows={expandableRows}
+          selectableRows={selectableRows}
+          isDisableSelectAll={isDisableSelectAll}
+          noTableHead={noTableHead}
+          pagination={pagination}
+          isShowingSearchInput={isShowingSearchInput}
+          highlightOnHover={highlightOnHover}
+          stripedRows={stripedRows}
+          pointerOnHover={pointerOnHover}
+          dense={dense}
+          rowsPerPage={20}
+        />
+      </main>
     </div>
   )
 }
