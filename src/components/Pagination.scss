@@ -1,7 +1,19 @@
+.Pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 .Pagination__select {
   margin-right: 1rem;
 }
 
+.Pagination__buttonList {
+  display: inline-block;
+  margin-left: 1rem;
+}
+
 .Pagination__button {
+  display: inline-block;
   margin-right: .5rem;
 }

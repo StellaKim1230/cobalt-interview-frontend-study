@@ -113,9 +113,10 @@ const DataTable: FC<Props> = ({
       pagination ? chunkedData[pageIndex] : sortedData
     )
     //eslint-disable-next-line
-  }, [chunkedData, pageIndex, pageChunkSize])
+  }, [chunkedData, pageIndex])
 
   useEffect(() => {
+    setPageIndex(0)
     setChunkedData(chunk(sortedData, pageChunkSize))
     //eslint-disable-next-line
   }, [pageChunkSize, pagination, sortedData])
@@ -229,6 +230,8 @@ const DataTable: FC<Props> = ({
         <Pagination
           currentPageIndex={pageIndex}
           lastPageIndex={chunkedData.length - 1}
+          totalDataSize={sortedData.length}
+          pageChunkSize={pageChunkSize}
           setPageIndex={setPageIndex}
           setPageChunkSize={setPageChunkSize}
         />
