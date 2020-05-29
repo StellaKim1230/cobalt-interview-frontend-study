@@ -6,16 +6,14 @@ import './Pagination.scss'
 
 interface Props {
   currentPageIndex: number
-  pageTotalSize: number
-  pageChunkSize: number
+  lastPageIndex: number
   setPageIndex: React.Dispatch<React.SetStateAction<number>>
   setPageChunkSize: React.Dispatch<React.SetStateAction<number>>
 }
 
 const Pagination: FC<Props> = ({
   currentPageIndex,
-  pageTotalSize,
-  pageChunkSize,
+  lastPageIndex,
   setPageIndex,
   setPageChunkSize,
 }) => {
@@ -57,15 +55,15 @@ const Pagination: FC<Props> = ({
         type="button"
         className="Pagination__button"
         onClick={() => setPageIndex(currentPageIndex + 1)}
-        disabled={currentPageIndex > pageTotalSize}
+        disabled={currentPageIndex >= lastPageIndex}
       >
         {'>'}
       </button>
       <button
         type="button"
         className="Pagination__button"
-        onClick={() => setPageIndex(pageTotalSize)}
-        disabled={pageTotalSize < pageChunkSize}
+        onClick={() => setPageIndex(lastPageIndex)}
+        disabled={currentPageIndex >= lastPageIndex}
       >
         {'>>'}
       </button>
