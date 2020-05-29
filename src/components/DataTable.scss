@@ -34,6 +34,7 @@
 .TableRow__td {
   padding: .5rem;
   border-right: 1px solid rgba(0, 0, 0, 0.1);
+  vertical-align: middle;
 
   &:last-child {
     border-right : none;
@@ -45,9 +46,5 @@
     &:hover, &:active {
       background-color: rgba(0, 0, 0, 0.2);
     }
-  }
-
-  &--isNotShowing {
-    display: none;
   }
 }

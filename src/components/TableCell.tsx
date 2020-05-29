@@ -1,7 +1,5 @@
 import React, { FC, TdHTMLAttributes } from 'react'
 
-import cx from 'classnames'
-
 import { TableColumn } from '../@types/model'
 
 interface Props extends TdHTMLAttributes<HTMLTableDataCellElement> {
@@ -9,12 +7,11 @@ interface Props extends TdHTMLAttributes<HTMLTableDataCellElement> {
 }
 
 const TableCell: FC<Props> = ({ column, colSpan, rowSpan, children }) => {
-  console.log(colSpan, rowSpan)
+  if (colSpan === 0 || rowSpan === 0) return null
+
   return (
     <td
-      className={cx('TableRow__td', {
-        'TableRow__td--isNotShowing': colSpan === 0 || rowSpan === 0,
-      })}
+      className="TableRow__td"
       style={column.style}
       colSpan={colSpan}
       rowSpan={rowSpan}
