@@ -1,4 +1,5 @@
 ## 코발트 코딩 과제 - 프론트엔드
+
 ### 확장 가능한 DataTable 컴포넌트 구현
 
 1. Basic usage (columns setting and data render)
@@ -13,3 +14,7 @@
 10. Selectable
 11. RowSpan
 12. ColSpan
+
+- data flow
+
+* sortedData -> dataSource -> chunkedData -> currentData

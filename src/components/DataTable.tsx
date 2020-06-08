@@ -1,7 +1,16 @@
 import React, { FC, useEffect, useState, Fragment } from 'react'
 
 import cx from 'classnames'
-import { get, find, chunk, isNil, isFunction, merge, eq, includes } from 'lodash'
+import {
+  get,
+  find,
+  chunk,
+  isNil,
+  isFunction,
+  merge,
+  eq,
+  includes,
+} from 'lodash'
 
 import TableHead from './TableHead'
 import TableCell from './TableCell'
@@ -9,7 +18,13 @@ import SearchInput from './SearchInput'
 import Pagination from './Pagination'
 
 import { TableColumn } from '../@types/model'
-import { SortType, SearchType, DEFAULT_PAGE_CHUNK_SIZE, DEFAULT_CURRENT_PAGE_INDEX, PageChunkSizeOption } from '../utils/constants'
+import {
+  SortType,
+  SearchType,
+  DEFAULT_PAGE_CHUNK_SIZE,
+  DEFAULT_CURRENT_PAGE_INDEX,
+  PageChunkSizeOption,
+} from '../utils/constants'
 import { getSortOption, getSortedData } from '../utils/dataTableUtils'
 
 import './DataTable.scss'
@@ -58,34 +73,43 @@ const DataTable: FC<Props> = ({
   rowsPerPage,
 }) => {
   // datasource
-  const [ sortOption, setSortOption ] = useState<[string, SortType] | null>(
-    getSortOption(defaultSortSelector, find(columns, ['sortable', true])?.selector)
+  const [sortOption, setSortOption] = useState<[string, SortType] | null>(
+    getSortOption(
+      defaultSortSelector,
+      find(columns, ['sortable', true])?.selector,
+    ),
   )
-  const [ dataSource, setDataSource ] = useState(getSortedData(data, sortOption))
+  const [dataSource, setDataSource] = useState(getSortedData(data, sortOption))
 
   // expandable rows
-  const [ isExpand, setIsExpand ] = useState(false)
-  const [ expandRowId, setExpandRowId ] = useState<string | null>(null)
+  const [isExpand, setIsExpand] = useState(false)
+  const [expandRowId, setExpandRowId] = useState<string | null>(null)
 
   // selected rows
-  const [ isSelectAll, setIsSelectAll ] = useState(false)
-  const [ selectedItemsCount, setSelectedItemsCount ] = useState(0)
+  const [isSelectAll, setIsSelectAll] = useState(false)
+  const [selectedItemsCount, setSelectedItemsCount] = useState(0)
 
   // pagination
-  const [ pageChunkSize, setPageChunkSize ] = useState(rowsPerPage ?? DEFAULT_PAGE_CHUNK_SIZE)
-  const [ pageIndex, setPageIndex ] = useState(DEFAULT_CURRENT_PAGE_INDEX)
+  const [pageChunkSize, setPageChunkSize] = useState(
+    rowsPerPage ?? DEFAULT_PAGE_CHUNK_SIZE,
+  )
+  const [pageIndex, setPageIndex] = useState(DEFAULT_CURRENT_PAGE_INDEX)
 
   // search
-  const [ searchSelector, setSearchSelector ] = useState(defaultSearchSelector ?? '')
-  const [ searchType, setSearchType ] = useState(SearchType.EQ)
-  const [ searchKeyword, setSearchKeyword ] = useState<string | null>(null)
+  const [searchSelector, setSearchSelector] = useState(
+    defaultSearchSelector ?? '',
+  )
+  const [searchType, setSearchType] = useState(SearchType.EQ)
+  const [searchKeyword, setSearchKeyword] = useState<string | null>(null)
 
-  const [ chunkedData, setChunkedData ] = useState(
-    pagination ? chunk(dataSource, pageChunkSize) : dataSource
+  const [chunkedData, setChunkedData] = useState(
+    pagination ? chunk(dataSource, pageChunkSize) : dataSource,
   )
 
   // 실제 사용될 데이터
-  const [ currentData, setCurrentData ] = useState<any[]>(pagination ? chunkedData[pageIndex] : dataSource)
+  const [currentData, setCurrentData] = useState<any[]>(
+    pagination ? chunkedData[pageIndex] : dataSource,
+  )
 
   const onExpandRow = (id: string) => {
     if (isNil(expandRowId)) {
@@ -151,9 +175,14 @@ const DataTable: FC<Props> = ({
 
       setDataSource(
         getSortedData(
-          data.filter(data => filterFunction(get(data, searchSelector).toLowerCase(), searchKeyword.toLowerCase())),
-          sortOption
-        )
+          data.filter((data) =>
+            filterFunction(
+              get(data, searchSelector).toLowerCase(),
+              searchKeyword.toLowerCase(),
+            ),
+          ),
+          sortOption,
+        ),
       )
     }
     // eslint-disable-next-line
@@ -171,7 +200,11 @@ const DataTable: FC<Props> = ({
           setSearchType={setSearchType}
         />
       ) : null}
-      {getSelectedItemCount !== 0 ? (<p className="DataTable__selectedCount">{getSelectedItemCount} items selected</p>) : null}
+      {getSelectedItemCount !== 0 ? (
+        <p className="DataTable__selectedCount">
+          {getSelectedItemCount} items selected
+        </p>
+      ) : null}
       {isLoading ? (
         <p>Loading...</p>
       ) : (
@@ -186,15 +219,17 @@ const DataTable: FC<Props> = ({
               onSelectAll={onSelectAll}
               setSortOption={setSortOption}
             />
-          ) : null }
+          ) : null}
           <tbody className="DataTable__body">
             {currentData?.map((row, index) => (
               <Fragment key={row.id}>
-                <tr className={cx('DataTable__row', {
-                  'DataTable__row--highlightHover': highlightOnHover,
-                  'DataTable__row--stripedRows': stripedRows,
-                  'DataTable__row--pointerOnHover': pointerOnHover,
-                })}>
+                <tr
+                  className={cx('DataTable__row', {
+                    'DataTable__row--highlightHover': highlightOnHover,
+                    'DataTable__row--stripedRows': stripedRows,
+                    'DataTable__row--pointerOnHover': pointerOnHover,
+                  })}
+                >
                   {expandableRows ? (
                     <TableCell
                       className={cx({
@@ -216,18 +251,29 @@ const DataTable: FC<Props> = ({
                   ) : null}
                   {columns.map(({ selector, render, style, key }) => {
                     const value = get(row, selector)
-                    if (!isFunction(render)) return <TableCell dense={dense} style={style} key={key}>{value}</TableCell>
+                    if (!isFunction(render))
+                      return (
+                        <TableCell dense={dense} style={style} key={key}>
+                          {value}
+                        </TableCell>
+                      )
 
                     const renderData = render({ value, index, row })
                     const props = merge(renderData.props, { style })
 
-                    return <TableCell dense={dense} {...props} key={key}>{renderData.children}</TableCell>
+                    return (
+                      <TableCell dense={dense} {...props} key={key}>
+                        {renderData.children}
+                      </TableCell>
+                    )
                   })}
                 </tr>
                 {expandableRows && isExpand && expandRowId === row.id ? (
                   <tr className="DataTable__row">
                     <TableCell colSpan={Object.keys(row).length + 1}>
-                      {expandableRowSelector ? get(row, expandableRowSelector) : 'no content'}
+                      {expandableRowSelector
+                        ? get(row, expandableRowSelector)
+                        : 'no content'}
                     </TableCell>
                   </tr>
                 ) : null}
